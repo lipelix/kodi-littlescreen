@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings version="1">
-    <section id="plugin.video.ytkids">
+    <section id="plugin.video.littlescreen">
         <category id="profiles" label="30000">
             <group id="profile1" label="30001">
                 <setting id="profile1.enabled" type="boolean" label="30010" help="30040">

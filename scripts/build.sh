@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Package the add-on as an installable zip: dist/plugin.video.ytkids-<version>.zip
+# Package the add-on as an installable zip: dist/plugin.video.littlescreen-<version>.zip
 set -euo pipefail
 cd "$(dirname "$0")/.."
-id=plugin.video.ytkids
+id=plugin.video.littlescreen
 version=$(sed -n 's/.*<addon id="'"$id"'"[^>]* version="\([^"]*\)".*/\1/p' "$id/addon.xml")
 [ -n "$version" ] || { echo "version not found in $id/addon.xml" >&2; exit 1; }
 mkdir -p dist

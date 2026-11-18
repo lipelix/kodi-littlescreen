@@ -20,7 +20,7 @@ def packet(ptype, payload, uid):
 def main():
     host, builtin = sys.argv[1], sys.argv[2]
     uid = int(time.time()) & 0xFFFFFFFF
-    helo = b"kodi-ytkids\0" + bytes([0]) + struct.pack("!HII", 0, 0, 0)
+    helo = b"kodi-littlescreen\0" + bytes([0]) + struct.pack("!HII", 0, 0, 0)
     action = bytes([ACTION_EXECBUILTIN]) + builtin.encode() + b"\0"
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
         for ptype, payload in ((PT_HELO, helo), (PT_ACTION, action), (PT_BYE, b"")):

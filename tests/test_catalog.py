@@ -1,4 +1,4 @@
-from ytkids import catalog
+from littlescreen import catalog
 
 
 def test_home_lists_categories_with_selected_first(fixture):

@@ -10,7 +10,7 @@ import random
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
-ROOT = os.path.join(os.path.dirname(__file__), "..", "plugin.video.ytkids", "resources")
+ROOT = os.path.join(os.path.dirname(__file__), "..", "plugin.video.littlescreen", "resources")
 MEDIA = os.path.join(ROOT, "media")
 FONT = "/System/Library/Fonts/Supplemental/Arial Rounded Bold.ttf"
 SS = 4  # supersampling

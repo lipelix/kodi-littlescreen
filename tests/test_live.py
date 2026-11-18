@@ -4,8 +4,8 @@ import os
 
 import pytest
 
-from ytkids import catalog
-from ytkids.innertube import AGE_GROUPS, KidsClient
+from littlescreen import catalog
+from littlescreen.innertube import AGE_GROUPS, KidsClient
 
 pytestmark = [
     pytest.mark.live,

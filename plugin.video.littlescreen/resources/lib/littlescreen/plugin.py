@@ -1,4 +1,4 @@
-"""Kodi directory listings for the YouTube Kids add-on."""
+"""Kodi directory listings for Little Screen (the YouTube Kids catalogue)."""
 
 import os
 import re
@@ -11,11 +11,12 @@ import xbmcgui
 import xbmcplugin
 import xbmcvfs
 
-from ytkids import catalog, language
-from ytkids.innertube import InnerTubeError, KidsClient
-from ytkids.profiles import find_profile, load_profiles
-from ytkids.videocache import VideoCache
+from littlescreen import catalog, language
+from littlescreen.innertube import InnerTubeError, KidsClient
+from littlescreen.profiles import find_profile, load_profiles
+from littlescreen.videocache import VideoCache
 
+LOG_PREFIX = "[plugin.video.littlescreen]"
 YOUTUBE_PLAY = "plugin://plugin.video.youtube/play/?video_id={}"
 ESTUARY = "skin.estuary"
 VIEW_WALL = 500
@@ -114,7 +115,7 @@ class Plugin:
         return False  # listed without the GUI, e.g. over JSON-RPC
 
     def fail(self, message):
-        xbmc.log(f"[plugin.video.ytkids] {message}", xbmc.LOGERROR)
+        xbmc.log(f"{LOG_PREFIX} {message}", xbmc.LOGERROR)
         xbmcgui.Dialog().notification(
             self.addon.getAddonInfo("name"), self.tr(S_LOAD_FAILED), xbmcgui.NOTIFICATION_ERROR
         )
@@ -279,7 +280,7 @@ class Plugin:
             try:
                 return channel_id, catalog.parse_channel(client.channel(channel_id))
             except InnerTubeError as err:
-                xbmc.log(f"[plugin.video.ytkids] channel {channel_id}: {err}", xbmc.LOGWARNING)
+                xbmc.log(f"{LOG_PREFIX} channel {channel_id}: {err}", xbmc.LOGWARNING)
                 return channel_id, None
 
         client.client_version()  # fetch it once, not in every thread

@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from ytkids.innertube import InnerTubeError, KidsClient, parse_client_version
+from littlescreen.innertube import InnerTubeError, KidsClient, parse_client_version
 
 HTML = '<script>ytcfg.set({"INNERTUBE_CLIENT_VERSION":"2.20261117.00.00","X":1})</script>'
 
