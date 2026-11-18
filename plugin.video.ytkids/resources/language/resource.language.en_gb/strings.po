@@ -1,0 +1,152 @@
+# Kodi Media Center language file
+# Addon id: plugin.video.ytkids
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Profiles"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Profile 1"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Profile 2"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Profile 3"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Show this profile"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Name"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Age group"
+msgstr ""
+
+msgctxt "#30013"
+msgid "4 and under"
+msgstr ""
+
+msgctxt "#30014"
+msgid "5 to 8"
+msgstr ""
+
+msgctxt "#30015"
+msgid "9 to 12"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Look"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Big pictures (toddlers)"
+msgstr ""
+
+msgctxt "#30018"
+msgid "List with titles"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Allow search"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Language and region"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Language"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Region"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Videos in"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Any language"
+msgstr ""
+
+msgctxt "#30025"
+msgid "All but Slovak"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Czech only"
+msgstr ""
+
+msgctxt "#30046"
+msgid "Guessed from titles and channel names. \"Czech only\" also hides other languages; videos whose language is unclear stay."
+msgstr ""
+
+msgctxt "#30027"
+msgid "Play the next video automatically"
+msgstr ""
+
+msgctxt "#30047"
+msgid "After the picked video, the following videos of the same list play (up to 50)."
+msgstr ""
+
+msgctxt "#30030"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30031"
+msgid "More videos"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Cannot load YouTube Kids"
+msgstr ""
+
+msgctxt "#30033"
+msgid "No profile is turned on. Turn one on in the add-on settings."
+msgstr ""
+
+msgctxt "#30034"
+msgid "Nothing found"
+msgstr ""
+
+msgctxt "#30035"
+msgid "Who is watching?"
+msgstr ""
+
+msgctxt "#30040"
+msgid "With one profile on, the add-on opens it straight away."
+msgstr ""
+
+msgctxt "#30041"
+msgid "YouTube Kids picks videos suitable for this age."
+msgstr ""
+
+msgctxt "#30042"
+msgid "Big pictures: no text, no search. List: titles, channel names and search."
+msgstr ""
+
+msgctxt "#30043"
+msgid "Searches only the YouTube Kids catalogue for this age."
+msgstr ""
+
+msgctxt "#30044"
+msgid "Language of titles and categories, for example cs or en."
+msgstr ""
+
+msgctxt "#30045"
+msgid "Country whose catalogue is shown, for example CZ or SK."
+msgstr ""
