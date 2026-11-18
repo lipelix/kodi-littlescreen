@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.littlescreen" name="Little Screen" version="0.5.0" provider-name="lipelix">
+    <requires>
+        <import addon="xbmc.python" version="3.0.1"/>
+        <import addon="plugin.video.youtube" version="7.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="main.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Videos for children from the YouTube Kids catalogue, by age group</summary>
+        <summary lang="cs_CZ">Videa pro děti z katalogu YouTube Kids podle věku</summary>
+        <description lang="en_GB">Little Screen shows the YouTube Kids catalogue for the chosen age group: shows, music, learning and more. Each child gets a profile with an age group and either big pictures for toddlers or a list with titles and search. Videos play through the YouTube add-on. Little Screen is unofficial and not affiliated with, endorsed by or sponsored by YouTube or Google; it uses the same public interface as youtubekids.com.</description>
+        <description lang="cs_CZ">Little Screen ukazuje katalog YouTube Kids pro zvolený věk: pořady, hudbu, výuku a další. Každé dítě má svůj profil s věkem a buď velkými obrázky pro batolata, nebo seznamem s názvy a hledáním. Videa hraje doplněk YouTube. Little Screen je neoficiální a nemá nic společného s YouTube ani Googlem (není jimi podporován ani sponzorován); používá stejné veřejné rozhraní jako youtubekids.com.</description>
+        <disclaimer lang="en_GB">Unofficial add-on, not affiliated with YouTube or Google. YouTube Kids may change its interface at any time and the add-on may stop working.</disclaimer>
+        <disclaimer lang="cs_CZ">Neoficiální doplněk, nemá nic společného s YouTube ani Googlem. YouTube Kids může své rozhraní kdykoli změnit a doplněk pak může přestat fungovat.</disclaimer>
+        <platform>all</platform>
+        <license>MIT</license>
+        <source>https://github.com/lipelix/kodi-littlescreen</source>
+        <news>v0.5.0: first version as Little Screen.</news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

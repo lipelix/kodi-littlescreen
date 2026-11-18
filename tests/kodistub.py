@@ -67,7 +67,7 @@ class Addon:
         return f"#{string_id}"
 
     def getAddonInfo(self, key):
-        return {"path": STATE["path"], "profile": STATE["profile"], "name": "YouTube Kids"}[key]
+        return {"path": STATE["path"], "profile": STATE["profile"], "name": "Little Screen"}[key]
 
     def openSettings(self):
         STATE["opened_settings"] = True

@@ -3,7 +3,7 @@
 # Needs Kodi's web server (JSON-RPC, port 8080) and EventServer (UDP 9777) turned on.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-id=plugin.video.ytkids
+id=plugin.video.littlescreen
 kodi_home="$HOME/Library/Application Support/Kodi"
 host=127.0.0.1
 [ -d "$kodi_home/addons" ] || { echo "Kodi addons dir not found: $kodi_home/addons" >&2; exit 1; }

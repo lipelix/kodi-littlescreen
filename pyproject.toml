@@ -1,15 +1,15 @@
 [tool.ruff]
 line-length = 100
 target-version = "py39"
-src = ["plugin.video.ytkids/resources/lib", "tests"]
+src = ["plugin.video.littlescreen/resources/lib", "tests"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["plugin.video.ytkids/resources/lib", "tests"]
+pythonpath = ["plugin.video.littlescreen/resources/lib", "tests"]
 markers = ["live: hits the real YouTube Kids API (run with LIVE=1)"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["ytkids", "kodistub", "test_profiles"]
+known-first-party = ["littlescreen", "kodistub", "test_profiles"]

@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 
-from ytkids.innertube import AGE_GROUPS
+from littlescreen.innertube import AGE_GROUPS
 
 PROFILE_SLOTS = (1, 2, 3)
 STYLE_TODDLER = "toddler"

@@ -1,152 +1,152 @@
 # Kodi Media Center language file
-# Addon id: plugin.video.ytkids
+# Addon id: plugin.video.littlescreen
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: cs_CZ\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#30000"
 msgid "Profiles"
-msgstr "Profily"
+msgstr ""
 
 msgctxt "#30001"
 msgid "Profile 1"
-msgstr "Profil 1"
+msgstr ""
 
 msgctxt "#30002"
 msgid "Profile 2"
-msgstr "Profil 2"
+msgstr ""
 
 msgctxt "#30003"
 msgid "Profile 3"
-msgstr "Profil 3"
+msgstr ""
 
 msgctxt "#30010"
 msgid "Show this profile"
-msgstr "Zobrazit tento profil"
+msgstr ""
 
 msgctxt "#30011"
 msgid "Name"
-msgstr "Jméno"
+msgstr ""
 
 msgctxt "#30012"
 msgid "Age group"
-msgstr "Věk"
+msgstr ""
 
 msgctxt "#30013"
 msgid "4 and under"
-msgstr "Do 4 let"
+msgstr ""
 
 msgctxt "#30014"
 msgid "5 to 8"
-msgstr "5 až 8 let"
+msgstr ""
 
 msgctxt "#30015"
 msgid "9 to 12"
-msgstr "9 až 12 let"
+msgstr ""
 
 msgctxt "#30016"
 msgid "Look"
-msgstr "Vzhled"
+msgstr ""
 
 msgctxt "#30017"
 msgid "Big pictures (toddlers)"
-msgstr "Velké obrázky (batolata)"
+msgstr ""
 
 msgctxt "#30018"
 msgid "List with titles"
-msgstr "Seznam s názvy"
+msgstr ""
 
 msgctxt "#30019"
 msgid "Allow search"
-msgstr "Povolit hledání"
+msgstr ""
 
 msgctxt "#30020"
 msgid "Language and region"
-msgstr "Jazyk a oblast"
+msgstr ""
 
 msgctxt "#30021"
 msgid "Language"
-msgstr "Jazyk"
+msgstr ""
 
 msgctxt "#30022"
 msgid "Region"
-msgstr "Oblast"
+msgstr ""
 
 msgctxt "#30023"
 msgid "Videos in"
-msgstr "Jazyk videí"
+msgstr ""
 
 msgctxt "#30024"
 msgid "Any language"
-msgstr "Všechna"
+msgstr ""
 
 msgctxt "#30025"
 msgid "All but Slovak"
-msgstr "Bez slovenských"
+msgstr ""
 
 msgctxt "#30026"
 msgid "Czech only"
-msgstr "Jen česká"
+msgstr ""
 
 msgctxt "#30046"
 msgid "Guessed from titles and channel names. \"Czech only\" also hides other languages; videos whose language is unclear stay."
-msgstr "Odhaduje se z názvů videí a kanálů. „Jen česká“ skryje i jiné jazyky; videa s nejasným jazykem zůstanou."
+msgstr ""
 
 msgctxt "#30027"
 msgid "Play the next video automatically"
-msgstr "Automaticky přehrát další video"
+msgstr ""
 
 msgctxt "#30047"
 msgid "After the picked video, the following videos of the same list play (up to 50)."
-msgstr "Po vybraném videu se pustí další videa ze stejného seznamu (nejvýš 50)."
+msgstr ""
 
 msgctxt "#30030"
 msgid "Search"
-msgstr "Hledat"
+msgstr ""
 
 msgctxt "#30031"
 msgid "More videos"
-msgstr "Další videa"
+msgstr ""
 
 msgctxt "#30032"
-msgid "Cannot load YouTube Kids"
-msgstr "YouTube Kids se nepodařilo načíst"
+msgid "Cannot load the catalogue"
+msgstr ""
 
 msgctxt "#30033"
 msgid "No profile is turned on. Turn one on in the add-on settings."
-msgstr "Žádný profil není zapnutý. Zapněte ho v nastavení doplňku."
+msgstr ""
 
 msgctxt "#30034"
 msgid "Nothing found"
-msgstr "Nic nenalezeno"
+msgstr ""
 
 msgctxt "#30035"
 msgid "Who is watching?"
-msgstr "Kdo se dívá?"
+msgstr ""
 
 msgctxt "#30040"
 msgid "With one profile on, the add-on opens it straight away."
-msgstr "Když je zapnutý jen jeden profil, doplněk ho otevře rovnou."
+msgstr ""
 
 msgctxt "#30041"
 msgid "YouTube Kids picks videos suitable for this age."
-msgstr "YouTube Kids vybírá videa vhodná pro tento věk."
+msgstr ""
 
 msgctxt "#30042"
 msgid "Big pictures: no text, no search. List: titles, channel names and search."
-msgstr "Velké obrázky: bez textu a bez hledání. Seznam: názvy, kanály a hledání."
+msgstr ""
 
 msgctxt "#30043"
 msgid "Searches only the YouTube Kids catalogue for this age."
-msgstr "Hledá jen v katalogu YouTube Kids pro tento věk."
+msgstr ""
 
 msgctxt "#30044"
 msgid "Language of titles and categories, for example cs or en."
-msgstr "Jazyk názvů a kategorií, například cs nebo en."
+msgstr ""
 
 msgctxt "#30045"
 msgid "Country whose catalogue is shown, for example CZ or SK."
-msgstr "Země, jejíž katalog se zobrazí, například CZ nebo SK."
+msgstr ""

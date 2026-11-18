@@ -4,12 +4,12 @@ from urllib.parse import parse_qsl, urlparse
 import pytest
 
 import kodistub
+from littlescreen import plugin
+from littlescreen.innertube import InnerTubeError
 from test_profiles import DEFAULTS
-from ytkids import plugin
-from ytkids.innertube import InnerTubeError
 
-ADDON = os.path.join(os.path.dirname(__file__), "..", "plugin.video.ytkids")
-BASE = "plugin://plugin.video.ytkids/"
+ADDON = os.path.join(os.path.dirname(__file__), "..", "plugin.video.littlescreen")
+BASE = "plugin://plugin.video.littlescreen/"
 SETTINGS = {**DEFAULTS, "hl": "cs", "gl": "CZ", "video_language": 0}
 CZECH_ONLY = {**SETTINGS, "video_language": 2}
 
@@ -194,8 +194,8 @@ def test_view_waits_for_kodi_to_show_the_listing(kodi):
 
 
 def test_same_listing_ignores_parameter_order():
-    a = "plugin://plugin.video.ytkids/?action=category&c=kgQCCAM%253D&p=1"
-    b = "plugin://plugin.video.ytkids/?action=category&p=1&c=kgQCCAM%253D"
+    a = "plugin://plugin.video.littlescreen/?action=category&c=kgQCCAM%253D&p=1"
+    b = "plugin://plugin.video.littlescreen/?action=category&p=1&c=kgQCCAM%253D"
     assert plugin.same_listing(a, b)
     assert not plugin.same_listing(a, b.replace("p=1", "p=2"))
 

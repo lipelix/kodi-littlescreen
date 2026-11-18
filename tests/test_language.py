@@ -2,8 +2,8 @@ import json
 
 import pytest
 
-from ytkids import language as lang
-from ytkids.catalog import Channel, Video
+from littlescreen import language as lang
+from littlescreen.catalog import Channel, Video
 
 # Real titles from the CZ catalogue (2026-11-18): (title, channel, expected).
 CASES = [

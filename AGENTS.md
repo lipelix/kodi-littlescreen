@@ -1,10 +1,12 @@
-# kodi-ytkids
+# kodi-littlescreen
 
-Kodi add-on `plugin.video.ytkids`: the YouTube Kids catalogue on Kodi, unofficial.
+Kodi add-on `plugin.video.littlescreen` ("Little Screen"): the YouTube Kids catalogue on Kodi,
+unofficial and not affiliated with YouTube or Google. Keep "YouTube" out of the add-on name, id,
+icon and repository name; descriptions may say it shows the YouTube Kids catalogue.
 
 ## How it works
 
-- `resources/lib/ytkids/innertube.py` talks to the InnerTube API behind www.youtubekids.com
+- `resources/lib/littlescreen/innertube.py` talks to the InnerTube API behind www.youtubekids.com
   (client `WEB_KIDS`, id 76), signed out. The age group goes in
   `kidsAppInfo.contentSettings.corpusPreference`: `PRESCHOOL` (4 and under), `YOUNGER` (5–8),
   `TWEEN` (9–12). `OLDER` is rejected by the API. The client version is scraped from the page
@@ -43,9 +45,9 @@ python3 -m venv .venv && .venv/bin/pip install pytest ruff kodi-addon-checker pi
 .venv/bin/python -m pytest -q             # unit tests on fixtures (fake Kodi modules)
 LIVE=1 .venv/bin/python -m pytest -q      # plus live API tests
 .venv/bin/ruff check . && .venv/bin/ruff format --check .
-.venv/bin/kodi-addon-checker --branch omega plugin.video.ytkids
+.venv/bin/kodi-addon-checker --branch omega plugin.video.littlescreen
 .venv/bin/python scripts/make_media.py    # redraw icon, fanart, tiles
-./scripts/build.sh                        # dist/plugin.video.ytkids-<version>.zip
+./scripts/build.sh                        # dist/plugin.video.littlescreen-<version>.zip
 ./scripts/install-kodi.sh                 # copy into the local Kodi (macOS) and enable
 ```
 
@@ -54,7 +56,7 @@ LIVE=1 .venv/bin/python -m pytest -q      # plus live API tests
 - Kodi loads add-on strings (`strings.po`) only at startup or on a language change. After the
   first `install-kodi.sh` labels from `getLocalizedString` are empty until Kodi restarts.
 - Test listings without touching the TV: JSON-RPC `Files.GetDirectory` on
-  `plugin://plugin.video.ytkids/?...` runs the add-on inside Kodi with no GUI.
+  `plugin://plugin.video.littlescreen/?...` runs the add-on inside Kodi with no GUI.
 - `scripts/make_fixtures.py` shrinks saved API responses into `tests/fixtures/`.
 - `Container.SetViewMode` only sticks once Kodi shows the listing, so `finish()` waits for
   `Container.FolderPath`. Kodi reorders query parameters there: compare them as a dict.

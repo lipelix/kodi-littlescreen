@@ -1,6 +1,6 @@
 import pytest
 
-from ytkids.profiles import find_profile, load_profiles
+from littlescreen.profiles import find_profile, load_profiles
 
 DEFAULTS = {
     "profile1.enabled": True,

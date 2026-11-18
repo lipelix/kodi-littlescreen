@@ -1,5 +1,5 @@
-from ytkids import videocache
-from ytkids.catalog import Video
+from littlescreen import videocache
+from littlescreen.catalog import Video
 
 
 def test_remember_and_get(tmp_path):
