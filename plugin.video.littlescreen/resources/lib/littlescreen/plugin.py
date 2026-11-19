@@ -94,6 +94,9 @@ class Plugin:
                     kodi_setting("locale.language"), kodi_setting("locale.country"), read_text
                 ),
             )
+            xbmc.log(
+                f"{LOG_PREFIX} catalogue hl={self._locale[0]} gl={self._locale[1]}", xbmc.LOGDEBUG
+            )
         return self._locale
 
     def new_client(self, profile):

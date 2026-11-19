@@ -136,6 +136,7 @@ class Player:
 
 def install():
     xbmc = types.ModuleType("xbmc")
+    xbmc.LOGDEBUG = 0
     xbmc.LOGWARNING = 2
     xbmc.LOGERROR = 4
     xbmc.ISO_639_1 = 0
