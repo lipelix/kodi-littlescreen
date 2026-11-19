@@ -53,7 +53,7 @@ icon and repository name; descriptions may say it shows the YouTube Kids catalog
 ## Commands
 
 ```bash
-python3 -m venv .venv && .venv/bin/pip install pytest ruff kodi-addon-checker pillow
+python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
 .venv/bin/python -m pytest -q             # unit tests on fixtures (fake Kodi modules)
 LIVE=1 .venv/bin/python -m pytest -q      # plus live API tests
 .venv/bin/ruff check . && .venv/bin/ruff format --check .
@@ -62,6 +62,11 @@ LIVE=1 .venv/bin/python -m pytest -q      # plus live API tests
 ./scripts/build.sh                        # dist/plugin.video.littlescreen-<version>.zip
 ./scripts/install-kodi.sh                 # copy into the local Kodi (macOS) and enable
 ```
+
+CI (`.github/workflows/ci.yml`, pull requests and `main`) runs ruff, pytest (no live tests),
+`kodi-addon-checker --branch omega` and uploads the zip from `build.sh` as an artifact. Jobs
+run on the runner named by the `RUNNER_LABELS` repository variable (JSON list of labels; the
+self-hosted runner while the repository is private), GitHub-hosted `ubuntu-latest` when unset.
 
 ## Language filter: adding a pack
 

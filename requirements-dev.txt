@@ -1,0 +1,5 @@
+# Tools for checks and tests (CI installs exactly these; bump on purpose).
+kodi-addon-checker==0.0.36
+pillow==13.0.0
+pytest==9.2.0
+ruff==0.17.5
