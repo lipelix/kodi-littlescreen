@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Little Screen: the YouTube Kids catalogue on Kodi</title>
+<meta name="description" content="Little Screen is an unofficial Kodi add-on that shows the YouTube Kids catalogue by age group. Install it from this Kodi repository.">
+<link rel="icon" type="image/png" href="plugin.video.littlescreen/resources/icon.png">
+<style>
+:root {
+  --ink: #1f2440;
+  --muted: #5a607a;
+  --paper: #fff8f1;
+  --card: #ffffff;
+  --night: #1e2a4a;
+  --night-2: #2b3266;
+  --coral: #ff6b4a;
+  --coral-ink: #b83a1e;
+  --sun: #fed51c;
+  --radius: 20px;
+  font-family: ui-rounded, "SF Pro Rounded", "Nunito", "Segoe UI", system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+}
+* { box-sizing: border-box; }
+body { margin: 0; line-height: 1.6; font-size: 1.0625rem; }
+a { color: var(--coral-ink); text-underline-offset: 3px; }
+a:focus-visible, .button:focus-visible { outline: 3px solid var(--sun); outline-offset: 3px; }
+code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: .92em;
+  background: #fbeee2; padding: .1em .35em; border-radius: 6px; overflow-wrap: anywhere; }
+.wrap { width: min(100% - 2.5rem, 62rem); margin-inline: auto; }
+
+/* Hero: the add-on's fanart, drawn with CSS */
+.hero {
+  color: #fff;
+  background-color: var(--night);
+  background-image:
+    radial-gradient(circle at 12% 22%, rgb(126 87 194 / .55) 0 3.2rem, transparent 3.3rem),
+    radial-gradient(circle at 86% 18%, rgb(57 166 149 / .5) 0 2.6rem, transparent 2.7rem),
+    radial-gradient(circle at 78% 82%, rgb(254 213 28 / .35) 0 3.6rem, transparent 3.7rem),
+    radial-gradient(circle at 4% 96%, rgb(255 107 74 / .4) 0 2.2rem, transparent 2.3rem),
+    radial-gradient(circle at 55% 12%, rgb(103 192 255 / .35) 0 1.2rem, transparent 1.3rem),
+    linear-gradient(180deg, #1e2a4a, #2b3266);
+  padding: 3.5rem 0 4.5rem;
+  overflow: hidden;
+}
+.hero .wrap { display: grid; gap: 2rem; align-items: center; }
+.hero img { width: 7.5rem; height: 7.5rem; border-radius: 28px;
+  box-shadow: 0 18px 40px rgb(0 0 0 / .35); animation: bob 6s ease-in-out infinite; }
+.hero h1 { font-size: clamp(2.4rem, 7vw, 3.8rem); line-height: 1.05; margin: 0 0 .75rem; letter-spacing: -.02em; }
+.hero p { margin: 0 0 1rem; max-width: 36rem; color: #e4e8f7; font-size: 1.15rem; }
+.hero .note { font-size: .95rem; color: #c7d0f0; }
+.actions { display: flex; flex-wrap: wrap; gap: .75rem 1.25rem; align-items: center; margin-top: 1.75rem; }
+.button {
+  display: inline-flex; align-items: center; gap: .6rem;
+  background: var(--sun); color: var(--ink); font-weight: 700; text-decoration: none;
+  padding: .9rem 1.4rem; border-radius: 999px; font-size: 1.05rem;
+  box-shadow: 0 6px 0 #c9a400, 0 12px 24px rgb(0 0 0 / .25);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.button:hover { transform: translateY(-2px); box-shadow: 0 8px 0 #c9a400, 0 16px 28px rgb(0 0 0 / .3); }
+.button:active { transform: translateY(4px); box-shadow: 0 2px 0 #c9a400, 0 6px 12px rgb(0 0 0 / .25); }
+.button svg { width: 1.2rem; height: 1.2rem; }
+.hero .actions a:not(.button) { color: #fff; }
+@media (min-width: 46rem) { .hero .wrap { grid-template-columns: auto 1fr; gap: 2.5rem; } .hero img { width: 10rem; height: 10rem; } }
+
+main section { padding: 3rem 0 0; }
+h2 { font-size: 1.75rem; margin: 0 0 1rem; letter-spacing: -.01em; }
+h3 { font-size: 1.15rem; margin: 0 0 .35rem; }
+
+ol.steps { list-style: none; counter-reset: step; padding: 0; margin: 0; display: grid; gap: 1rem; }
+ol.steps li { counter-increment: step; background: var(--card); border-radius: var(--radius);
+  padding: 1.1rem 1.25rem 1.1rem 4.1rem; position: relative; box-shadow: 0 1px 0 #f0e2d4, 0 8px 24px rgb(31 36 64 / .06); }
+ol.steps li::before { content: counter(step); position: absolute; left: 1.1rem; top: 1rem;
+  width: 2.2rem; height: 2.2rem; border-radius: 50%; display: grid; place-items: center;
+  background: var(--night); color: #fff; font-weight: 700; }
+
+.grid { display: grid; gap: 1rem; }
+@media (min-width: 46rem) { .grid { grid-template-columns: repeat(2, 1fr); } }
+.card { background: var(--card); border-radius: var(--radius); padding: 1.25rem 1.4rem;
+  box-shadow: 0 1px 0 #f0e2d4, 0 8px 24px rgb(31 36 64 / .06);
+  border-top: 6px solid var(--accent, var(--coral)); transition: transform .2s ease; }
+.card:hover { transform: translateY(-3px); }
+.card p { margin: 0; color: var(--muted); }
+.card.profiles { --accent: #ff8a65; }
+.card.filter { --accent: #7e57c2; }
+.card.autoplay { --accent: #26a69a; }
+.card.privacy { --accent: #2e5fd8; }
+
+.callout { background: #fff1d6; border-radius: var(--radius); padding: 1.25rem 1.4rem; margin-top: 1.5rem; }
+.callout p { margin: .4rem 0 0; }
+ul.limits { padding-left: 1.2rem; margin: 0; }
+ul.limits li { margin-bottom: .5rem; }
+
+details.files { margin: 3rem 0 0; background: var(--card); border-radius: var(--radius); padding: 1rem 1.4rem; }
+details.files summary { cursor: pointer; font-weight: 700; }
+details.files ul { columns: 2 16rem; margin: .75rem 0 0; padding-left: 1.2rem; }
+footer { padding: 2.5rem 0 3rem; color: var(--muted); font-size: .95rem; }
+
+@keyframes bob { 50% { transform: translateY(-8px) rotate(-2deg); } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <img src="plugin.video.littlescreen/resources/icon.png" alt="">
+    <div>
+      <h1>Little Screen</h1>
+      <p>The YouTube Kids catalogue on Kodi: shows, music and learning, picked for each
+      child's age. Big pictures for toddlers, a list with search for older children.</p>
+      <p class="note">Unofficial, not affiliated with YouTube or Google. Version $version, for Kodi 20 or later.</p>
+      <div class="actions">
+        <a class="button" href="$repo_zip" download>
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>
+          Download repository
+        </a>
+        <a href="https://github.com/lipelix/kodi-littlescreen#readme">Read the full guide</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="install" aria-labelledby="install-title">
+    <h2 id="install-title">Install in four steps</h2>
+    <ol class="steps">
+      <li>In Kodi, open <strong>Settings → System → Add-ons</strong> and turn on <strong>Unknown sources</strong>.</li>
+      <li>Download the repository zip above and copy it where Kodi can open it, or add
+        <code>https://lipelix.github.io/kodi-littlescreen/</code> as a source in
+        <strong>Settings → File manager</strong>.</li>
+      <li><strong>Settings → Add-ons → Install from zip file</strong> and pick <code>$repo_zip</code>.</li>
+      <li><strong>Install from repository → Little Screen repository → Video add-ons → Little Screen.</strong>
+        The YouTube add-on, which plays the videos, comes with it. Updates arrive on their own.</li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="what-title">
+    <h2 id="what-title">What it does</h2>
+    <div class="grid">
+      <div class="card profiles">
+        <h3>A profile per child</h3>
+        <p>Up to three profiles, each with an age group (4 and under, 5 to 8, 9 to 12) and a
+        look: big pictures without text, or a list with titles and search.</p>
+      </div>
+      <div class="card filter">
+        <h3>Their language</h3>
+        <p>The catalogue follows Kodi's language and region. Videos clearly in another
+        language can be hidden; a video whose language is unclear always stays.</p>
+      </div>
+      <div class="card autoplay">
+        <h3>Autoplay that stops</h3>
+        <p>The next videos of the same list play after the one picked, up to 50, then it
+        stops. No suggested videos from outside the list.</p>
+      </div>
+      <div class="card privacy">
+        <h3>Private</h3>
+        <p>No account, no sign-in, no analytics. It talks only to youtubekids.com, and what it
+        remembers stays on the device.</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="limits-title">
+    <h2 id="limits-title">Good to know</h2>
+    <ul class="limits">
+      <li><strong>Profiles are not a lock.</strong> Use Kodi's master lock (Settings → Profiles)
+        to keep children out of settings and other add-ons.</li>
+      <li><strong>Unofficial interface.</strong> YouTube can change it at any time; the add-on may
+        then stop working until an update.</li>
+      <li><strong>The catalogue is YouTube's.</strong> Little Screen shows what YouTube Kids offers
+        for the age group and region; it does not review videos.</li>
+    </ul>
+    <div class="callout">
+      <h3>On a Mac, videos do not play?</h3>
+      <p>The YouTube add-on 7.4.x stops with “Could not connect to server” on macOS. In its
+      settings, <strong>Advanced → HTTP Server</strong>, set the IP address to <code>0.0.0.0</code>
+      and restart Kodi. Its server then answers other devices on your local network too (only
+      private addresses), so do it on a network you trust.</p>
+    </div>
+  </section>
+
+  <details class="files">
+    <summary>Repository files</summary>
+    <ul>
+$files
+    </ul>
+  </details>
+</main>
+
+<footer class="wrap">
+  <a href="https://github.com/lipelix/kodi-littlescreen">Source on GitHub</a> · MIT licence ·
+  “YouTube” and “YouTube Kids” are trademarks of Google LLC.
+</footer>
+</body>
+</html>

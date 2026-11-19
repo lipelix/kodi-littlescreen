@@ -10,7 +10,8 @@ Writes into OUT (default dist/pages, emptied first):
     repository.littlescreen-<version>.zip        the repository add-on, for "Install from zip"
     index.html (in every folder)                 links to all files: Kodi's file manager
                                                  browses the folders by them (GitHub Pages
-                                                 has no directory listing)
+                                                 has no directory listing); the root one is
+                                                 the landing page (scripts/landing.html)
 
 Zips are reproducible: sorted entries, fixed timestamps, no caches.
 --url serves the tree from somewhere else than GitHub Pages (e.g. http://127.0.0.1:8765/ to
@@ -21,6 +22,7 @@ import argparse
 import hashlib
 import os
 import shutil
+import string
 import sys
 import xml.etree.ElementTree as ET
 import zipfile
@@ -29,6 +31,8 @@ ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
 ADDONS = ("plugin.video.littlescreen", "repository.littlescreen")
 REPOSITORY = "repository.littlescreen"
 PAGES_URL = "https://lipelix.github.io/kodi-littlescreen/"
+LANDING = os.path.join(os.path.dirname(os.path.abspath(__file__)), "landing.html")
+PLUGIN = "plugin.video.littlescreen"
 EXCLUDE_DIRS = {"__pycache__", ".pytest_cache", ".ruff_cache"}
 EXCLUDE_FILES = {".DS_Store"}
 EXCLUDE_SUFFIXES = (".pyc", ".pyo")
@@ -135,25 +139,25 @@ def page(title, body):
 """
 
 
-def write_indexes(out, repo_zip):
+def landing(files, repo_zip, version):
+    """The root index.html: the landing page around the list of files.
+
+    Its other links have a text that differs from their href, so Kodi ignores them.
+    """
+    with open(LANDING, encoding="utf-8") as f:
+        template = string.Template(f.read())
+    return template.substitute(files=files, repo_zip=repo_zip, version=version)
+
+
+def write_indexes(out, repo_zip, version):
     """index.html in every folder (GitHub Pages has no directory listing)."""
     for dirpath, _dirnames, _filenames in os.walk(out):
         rel = os.path.relpath(dirpath, out).replace(os.sep, "/")
-        files = f"<ul>\n{listing(dirpath)}\n</ul>"
         if rel == ".":
-            body = f"""<h1>Little Screen</h1>
-<p>Kodi repository of Little Screen, the YouTube Kids catalogue on Kodi.
-Unofficial, not affiliated with YouTube or Google.</p>
-<p><a href="{repo_zip}">Download the repository</a>, install it with Add-ons /
-Install from zip file, then Little Screen from Add-ons / Install from repository.</p>
-<p><a href="https://github.com/lipelix/kodi-littlescreen">Source on GitHub</a></p>
-<h2>Files</h2>
-{files}"""
-            title = "Little Screen: Kodi repository"
-        else:
-            body = f"<h1>{rel}/</h1>\n{files}"
-            title = f"Little Screen: {rel}/"
-        write(os.path.join(dirpath, "index.html"), page(title, body))
+            write(os.path.join(dirpath, "index.html"), landing(listing(dirpath), repo_zip, version))
+            continue
+        body = f"<h1>{rel}/</h1>\n<ul>\n{listing(dirpath)}\n</ul>"
+        write(os.path.join(dirpath, "index.html"), page(f"Little Screen: {rel}/", body))
 
 
 def clean_out(out):
@@ -170,8 +174,10 @@ def build(src, out, url=PAGES_URL):
     clean_out(out)
     entries = []
     repo_zip = None
+    versions = {}
     for addon_id in ADDONS:
         version, xml, assets = read_addon(src, addon_id, url)
+        versions[addon_id] = version
         entries.append(xml)
         target = os.path.join(out, addon_id)
         os.makedirs(target)
@@ -194,7 +200,7 @@ def build(src, out, url=PAGES_URL):
         + "\n</addons>\n",
     )
     write(addons_xml + ".md5", file_hash(addons_xml, "md5") + "\n")
-    write_indexes(out, repo_zip)
+    write_indexes(out, repo_zip, versions[PLUGIN])
     return out
 
 
