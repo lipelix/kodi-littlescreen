@@ -10,7 +10,7 @@
 :root {
   --ink: #1f2440;
   --muted: #5a607a;
-  --paper: #fff8f1;
+  --paper: #f3f5fc;
   --card: #ffffff;
   --night: #1e2a4a;
   --night-2: #2b3266;
@@ -27,7 +27,7 @@ body { margin: 0; line-height: 1.6; font-size: 1.0625rem; }
 a { color: var(--coral-ink); text-underline-offset: 3px; }
 a:focus-visible, .button:focus-visible { outline: 3px solid var(--sun); outline-offset: 3px; }
 code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: .92em;
-  background: #fbeee2; padding: .1em .35em; border-radius: 6px; overflow-wrap: anywhere; }
+  background: #e6e9f6; padding: .1em .35em; border-radius: 6px; overflow-wrap: anywhere; }
 .wrap { width: min(100% - 2.5rem, 62rem); margin-inline: auto; }
 
 /* Hero: the add-on's fanart, drawn with CSS */
@@ -70,7 +70,7 @@ h3 { font-size: 1.15rem; margin: 0 0 .35rem; }
 
 ol.steps { list-style: none; counter-reset: step; padding: 0; margin: 0; display: grid; gap: 1rem; }
 ol.steps li { counter-increment: step; background: var(--card); border-radius: var(--radius);
-  padding: 1.1rem 1.25rem 1.1rem 4.1rem; position: relative; box-shadow: 0 1px 0 #f0e2d4, 0 8px 24px rgb(31 36 64 / .06); }
+  padding: 1.1rem 1.25rem 1.1rem 4.1rem; position: relative; box-shadow: 0 1px 0 #e1e5f2, 0 8px 24px rgb(31 36 64 / .06); }
 ol.steps li::before { content: counter(step); position: absolute; left: 1.1rem; top: 1rem;
   width: 2.2rem; height: 2.2rem; border-radius: 50%; display: grid; place-items: center;
   background: var(--night); color: #fff; font-weight: 700; }
@@ -78,8 +78,9 @@ ol.steps li::before { content: counter(step); position: absolute; left: 1.1rem; 
 .grid { display: grid; gap: 1rem; }
 @media (min-width: 46rem) { .grid { grid-template-columns: repeat(2, 1fr); } }
 .card { background: var(--card); border-radius: var(--radius); padding: 1.25rem 1.4rem;
-  box-shadow: 0 1px 0 #f0e2d4, 0 8px 24px rgb(31 36 64 / .06);
-  border-top: 6px solid var(--accent, var(--coral)); transition: transform .2s ease; }
+  box-shadow: 0 1px 0 #e1e5f2, 0 8px 24px rgb(31 36 64 / .06); transition: transform .2s ease; }
+.card::before { content: ""; display: block; width: 2.75rem; height: .4rem; border-radius: 999px;
+  background: var(--accent, var(--coral)); margin-bottom: .9rem; }
 .card:hover { transform: translateY(-3px); }
 .card p { margin: 0; color: var(--muted); }
 .card.profiles { --accent: #ff8a65; }
