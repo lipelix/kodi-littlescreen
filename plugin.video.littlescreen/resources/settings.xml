@@ -163,12 +163,10 @@
             <group id="language" label="30020">
                 <setting id="video_language" type="integer" label="30023" help="30046">
                     <level>0</level>
-                    <default>3</default>
+                    <default>2</default>
                     <constraints><options>
-                        <option label="30028">3</option>
-                        <option label="30024">0</option>
-                        <option label="30025">1</option>
                         <option label="30026">2</option>
+                        <option label="30024">0</option>
                     </options></constraints>
                     <control type="spinner" format="string"/>
                 </setting>
