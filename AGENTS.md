@@ -56,6 +56,15 @@ icon and repository name; descriptions may say it shows the YouTube Kids catalog
   Bump `plugin.video.littlescreen`'s version for every release; Kodi updates from the repository.
 - `README.md` is the user guide (install, settings, filter, autoplay, privacy, limits, the macOS
   note); keep it and the landing page in step with settings and behaviour.
+- Kodi versions: 20 (Nexus), 21 (Omega) and 22 (Piers) are checked by
+  `scripts/check-kodi-versions.sh`: each Kodi runs headless (Xvfb) in a Linux container
+  (`tests/kodi/Dockerfile.<version>`: Debian 12 → 20.1, Debian 13 → 21.2, Fedora 44 +
+  RPM Fusion → 22.0 RC until the final release), plugin.video.youtube and its dependencies
+  come from the official repository at image build time (`fetch_addons.py`), and
+  `tests/kodi/check.py` lists profiles, categories, a category and a channel over JSON-RPC
+  (TCP 9090) and plays the first video via `RunPlugin` (EventServer). The lowest
+  `xbmc.python` is 3.0.1 (Kodi 20): the `ListItem.getVideoInfoTag()` setters the add-on uses
+  came with Kodi 20; Kodi 21 has 3.0.1 too, Kodi 22 3.1.1.
 - Profiles (up to 3) live in the add-on settings: name (empty = the localised age group), age
   group, look (big pictures for toddlers = Estuary Wall view 500, no text, no search; or a list = WideList 55, with search).
 
@@ -71,6 +80,7 @@ LIVE=1 .venv/bin/python -m pytest -q      # plus live API tests
 ./scripts/build.sh                        # dist/plugin.video.littlescreen-<version>.zip
 ./scripts/install-kodi.sh                 # copy into the local Kodi (macOS) and enable
 .venv/bin/python scripts/build_repo.py    # dist/pages: the Kodi repository for GitHub Pages
+./scripts/check-kodi-versions.sh [20 21 22]   # Docker: headless Kodi, list + play; dist/kodi-check
 .venv/bin/python scripts/build_repo.py --out dist/pages --url http://127.0.0.1:8765/ \
   && .venv/bin/python scripts/serve_repo.py dist/pages 8765   # test it with a local Kodi
 ```
@@ -125,3 +135,7 @@ filtered by script and language names only.
   it (Kodi 21.3 crashed on it in a test), `scripts/serve_repo.py` and GitHub Pages can.
 - Kodi's mirror redirector may send add-on downloads (plugin.video.youtube) to a mirror that a
   network cannot reach; a test Kodi then cannot install dependencies from the official repo.
+- Headless Kodi in a container has no audio device ("no sink was returned" in its log);
+  video still plays. plugin.video.youtube logs tracebacks for missing `access_manager.json` /
+  `api_keys.json` on its first run: noise, not errors (`check.py` only counts log entries that
+  mention this add-on). JSON-RPC does not list `xbmc.python`; read its `addon.xml` instead.

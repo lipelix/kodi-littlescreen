@@ -1,0 +1,12 @@
+# Kodi 22 (Piers) from Fedora 44 + RPM Fusion (22.0 release candidate until the final release)
+FROM fedora:44
+RUN dnf -y install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-44.noarch.rpm \
+    && dnf -y install kodi kodi-inputstream-adaptive xorg-x11-server-Xvfb mesa-dri-drivers \
+        python3 \
+    && dnf clean all
+RUN useradd --create-home kodi
+USER kodi
+WORKDIR /home/kodi
+COPY fetch_addons.py entrypoint.sh /opt/kodi-check/
+RUN python3 /opt/kodi-check/fetch_addons.py piers plugin.video.youtube
+ENTRYPOINT ["/opt/kodi-check/entrypoint.sh"]

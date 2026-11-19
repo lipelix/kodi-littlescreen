@@ -128,6 +128,7 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
 .venv/bin/ruff check . && .venv/bin/ruff format --check .
 ./scripts/build.sh                        # dist/plugin.video.littlescreen-<version>.zip
 .venv/bin/python scripts/build_repo.py    # dist/pages: the Kodi repository
+./scripts/check-kodi-versions.sh          # Kodi 20, 21, 22 headless in Docker: list and play
 ```
 
 ## Licence
