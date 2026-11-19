@@ -3,6 +3,7 @@
 import hashlib
 import importlib.util
 import os
+import re
 import shutil
 import xml.etree.ElementTree as ET
 import zipfile
@@ -97,6 +98,22 @@ def test_every_folder_links_all_its_files(tree):
         for name in [d + "/" for d in dirnames] + [n for n in filenames if n != "index.html"]:
             # exactly once, or Kodi lists the file twice
             assert html.count(f'<a href="{name}">{name}</a>') == 1, (dirpath, name)
+
+
+def test_landing_page(tree):
+    with open(os.path.join(tree, "index.html")) as f:
+        html = f.read()
+    repo_zip = f"repository.littlescreen-{version_of('repository.littlescreen')}.zip"
+    assert f'class="button" href="{repo_zip}"' in html
+    assert f"Version {version_of('plugin.video.littlescreen')}" in html
+    assert "$" not in html  # every placeholder filled in
+    # Kodi lists the links whose text equals the href: exactly the files, nothing else
+    kodi_links = set(re.findall(r'<a href="([^"]+)">\1</a>', html))
+    entries = {n + "/" if os.path.isdir(os.path.join(tree, n)) else n for n in os.listdir(tree)}
+    assert kodi_links == entries - {"index.html"}
+    # what the page shows is in the tree
+    for src in re.findall(r'(?:src|href)="(plugin\.video\.littlescreen/[^"]+)"', html):
+        assert os.path.isfile(os.path.join(tree, src)), src
 
 
 def test_zips_are_reproducible(tree, tmp_path):

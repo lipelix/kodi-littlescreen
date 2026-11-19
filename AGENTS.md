@@ -50,9 +50,12 @@ icon and repository name; descriptions may say it shows the YouTube Kids catalog
 - Distribution: `repository.littlescreen` (own version, 1.0.0) points `info`/`checksum`/`datadir`
   to `https://lipelix.github.io/kodi-littlescreen/` and checks each zip by its `.sha256`.
   `scripts/build_repo.py` builds that tree (`addons.xml` + `.md5`, `<id>/<id>-<version>.zip`,
-  assets, the repository zip at the root, an `index.html` in every folder);
+  assets, the repository zip at the root, an `index.html` in every folder; the root one is the
+  landing page from `scripts/landing.html`, whose own links must not have their href as text);
   `.github/workflows/pages.yml` publishes it on a `v*` tag that matches the add-on version.
   Bump `plugin.video.littlescreen`'s version for every release; Kodi updates from the repository.
+- `README.md` is the user guide (install, settings, filter, autoplay, privacy, limits, the macOS
+  note); keep it and the landing page in step with settings and behaviour.
 - Profiles (up to 3) live in the add-on settings: name (empty = the localised age group), age
   group, look (big pictures for toddlers = Estuary Wall view 500, no text, no search; or a list = WideList 55, with search).
 
