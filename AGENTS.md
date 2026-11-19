@@ -81,6 +81,7 @@ LIVE=1 .venv/bin/python -m pytest -q      # plus live API tests
 ./scripts/install-kodi.sh                 # copy into the local Kodi (macOS) and enable
 .venv/bin/python scripts/build_repo.py    # dist/pages: the Kodi repository for GitHub Pages
 ./scripts/check-kodi-versions.sh [20 21 22]   # Docker: headless Kodi, list + play; dist/kodi-check
+./scripts/screenshots.sh [21]             # Docker: README/landing screenshots into docs/screenshots
 .venv/bin/python scripts/build_repo.py --out dist/pages --url http://127.0.0.1:8765/ \
   && .venv/bin/python scripts/serve_repo.py dist/pages 8765   # test it with a local Kodi
 ```
@@ -135,6 +136,12 @@ filtered by script and language names only.
   it (Kodi 21.3 crashed on it in a test), `scripts/serve_repo.py` and GitHub Pages can.
 - Kodi's mirror redirector may send add-on downloads (plugin.video.youtube) to a mirror that a
   network cannot reach; a test Kodi then cannot install dependencies from the official repo.
+- Screenshots in the container (`tests/kodi/screenshots.py`): Kodi's `TakeScreenshot` segfaults
+  under Xvfb, so `tests/kodi/xgrab.py` reads the X display through libX11 (ctypes). A GUI
+  navigation sound can crash Kodi there too (no audio sink): the script turns
+  `lookandfeel.soundskin` off first, hides ".." and closes the start-up "enable this add-on?"
+  dialogs (`Input.Back`). `Files.GetDirectory` returns items sorted by label, not in listing
+  order. `build_repo.py` copies `docs/screenshots` into the Pages tree (`screenshots/`).
 - Headless Kodi in a container has no audio device ("no sink was returned" in its log);
   video still plays. plugin.video.youtube logs tracebacks for missing `access_manager.json` /
   `api_keys.json` on its first run: noise, not errors (`check.py` only counts log entries that

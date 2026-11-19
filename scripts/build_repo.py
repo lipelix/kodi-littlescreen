@@ -8,6 +8,7 @@ Writes into OUT (default dist/pages, emptied first):
     <id>/<id>-<version>.zip (+ .sha256)          each add-on (datadir, hashes)
     <id>/<assets>                                icon/fanart shown before installing
     repository.littlescreen-<version>.zip        the repository add-on, for "Install from zip"
+    screenshots/*.jpg                            docs/screenshots, shown on the landing page
     index.html (in every folder)                 links to all files: Kodi's file manager
                                                  browses the folders by them (GitHub Pages
                                                  has no directory listing); the root one is
@@ -33,6 +34,7 @@ REPOSITORY = "repository.littlescreen"
 PAGES_URL = "https://lipelix.github.io/kodi-littlescreen/"
 LANDING = os.path.join(os.path.dirname(os.path.abspath(__file__)), "landing.html")
 PLUGIN = "plugin.video.littlescreen"
+SCREENSHOTS = os.path.join("docs", "screenshots")
 EXCLUDE_DIRS = {"__pycache__", ".pytest_cache", ".ruff_cache"}
 EXCLUDE_FILES = {".DS_Store"}
 EXCLUDE_SUFFIXES = (".pyc", ".pyo")
@@ -200,6 +202,9 @@ def build(src, out, url=PAGES_URL):
         + "\n</addons>\n",
     )
     write(addons_xml + ".md5", file_hash(addons_xml, "md5") + "\n")
+    screenshots = os.path.join(src, SCREENSHOTS)
+    if os.path.isdir(screenshots):
+        shutil.copytree(screenshots, os.path.join(out, "screenshots"))
     write_indexes(out, repo_zip, versions[PLUGIN])
     return out
 

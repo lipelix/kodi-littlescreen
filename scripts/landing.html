@@ -93,6 +93,14 @@ ol.steps li::before { content: counter(step); position: absolute; left: 1.1rem; 
 ul.limits { padding-left: 1.2rem; margin: 0; }
 ul.limits li { margin-bottom: .5rem; }
 
+.shots { display: grid; gap: 1.25rem; margin: 0; }
+@media (min-width: 46rem) { .shots { grid-template-columns: repeat(2, 1fr); } }
+.shots figure { margin: 0; }
+.shots img { display: block; width: 100%; height: auto; border-radius: 14px;
+  box-shadow: 0 1px 0 #e1e5f2, 0 10px 28px rgb(31 36 64 / .14); transition: transform .2s ease; }
+.shots img:hover { transform: scale(1.015); }
+.shots figcaption { margin-top: .55rem; color: var(--muted); font-size: .95rem; }
+
 details.files { margin: 3rem 0 0; background: var(--card); border-radius: var(--radius); padding: 1rem 1.4rem; }
 details.files summary { cursor: pointer; font-weight: 700; }
 details.files ul { columns: 2 16rem; margin: .75rem 0 0; padding-left: 1.2rem; }
@@ -161,6 +169,32 @@ footer { padding: 2.5rem 0 3rem; color: var(--muted); font-size: .95rem; }
         <p>No account, no sign-in, no analytics. It talks only to youtubekids.com, and what it
         remembers stays on the device.</p>
       </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="looks-title">
+    <h2 id="looks-title">How it looks</h2>
+    <div class="shots">
+      <figure>
+        <img src="screenshots/profiles.jpg" width="1280" height="720" loading="lazy"
+          alt="Kodi showing Little Screen's profile picker: two tiles, Ages 4 and under and Ages 5 to 8">
+        <figcaption>Who is watching? One tile per profile.</figcaption>
+      </figure>
+      <figure>
+        <img src="screenshots/big-pictures.jpg" width="1280" height="720" loading="lazy"
+          alt="The Shows category in the big-pictures look: a wall of large video thumbnails">
+        <figcaption>Big pictures for the youngest (ages 4 and under).</figcaption>
+      </figure>
+      <figure>
+        <img src="screenshots/list.jpg" width="1280" height="720" loading="lazy"
+          alt="The Shows category as a list: video titles with durations, the picked video's thumbnail and channel on the left">
+        <figcaption>A list with titles and channels (ages 5 to 8).</figcaption>
+      </figure>
+      <figure>
+        <img src="screenshots/search.jpg" width="1280" height="720" loading="lazy"
+          alt="Search results for dinosaurs in the list look: videos and two channels">
+        <figcaption>Search inside the YouTube Kids catalogue.</figcaption>
+      </figure>
     </div>
   </section>
 
