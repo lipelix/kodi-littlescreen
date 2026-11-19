@@ -42,7 +42,9 @@ jobs:
         run: .venv/bin/python -m pytest -q
 
       - name: Kodi add-on checker
-        run: .venv/bin/kodi-addon-checker --branch omega plugin.video.littlescreen
+        run: |
+          .venv/bin/kodi-addon-checker --branch omega plugin.video.littlescreen
+          .venv/bin/kodi-addon-checker --branch omega repository.littlescreen
 
       - name: Build zip
         id: build
@@ -52,4 +54,13 @@ jobs:
         with:
           name: plugin.video.littlescreen
           path: ${{ steps.build.outputs.zip }}
+          if-no-files-found: error
+
+      - name: Build the Kodi repository tree
+        run: .venv/bin/python scripts/build_repo.py --out dist/pages
+
+      - uses: actions/upload-artifact@v5
+        with:
+          name: pages
+          path: dist/pages
           if-no-files-found: error

@@ -47,6 +47,12 @@ icon and repository name; descriptions may say it shows the YouTube Kids catalog
   video and the following ones of the same listing (max 50), each through plugin.video.youtube.
   Kodi's own "play next item" setting is global by content type ("videos" = uncategorized),
   so it would also hit other add-ons; YouTube's "suggested videos" would leave the Kids catalogue.
+- Distribution: `repository.littlescreen` (own version, 1.0.0) points `info`/`checksum`/`datadir`
+  to `https://lipelix.github.io/kodi-littlescreen/` and checks each zip by its `.sha256`.
+  `scripts/build_repo.py` builds that tree (`addons.xml` + `.md5`, `<id>/<id>-<version>.zip`,
+  assets, the repository zip at the root, an `index.html` in every folder);
+  `.github/workflows/pages.yml` publishes it on a `v*` tag that matches the add-on version.
+  Bump `plugin.video.littlescreen`'s version for every release; Kodi updates from the repository.
 - Profiles (up to 3) live in the add-on settings: name (empty = the localised age group), age
   group, look (big pictures for toddlers = Estuary Wall view 500, no text, no search; or a list = WideList 55, with search).
 
@@ -61,10 +67,14 @@ LIVE=1 .venv/bin/python -m pytest -q      # plus live API tests
 .venv/bin/python scripts/make_media.py    # redraw icon, fanart, tiles
 ./scripts/build.sh                        # dist/plugin.video.littlescreen-<version>.zip
 ./scripts/install-kodi.sh                 # copy into the local Kodi (macOS) and enable
+.venv/bin/python scripts/build_repo.py    # dist/pages: the Kodi repository for GitHub Pages
+.venv/bin/python scripts/build_repo.py --out dist/pages --url http://127.0.0.1:8765/ \
+  && .venv/bin/python scripts/serve_repo.py dist/pages 8765   # test it with a local Kodi
 ```
 
 CI (`.github/workflows/ci.yml`, pull requests and `main`) runs ruff, pytest (no live tests),
-`kodi-addon-checker --branch omega` and uploads the zip from `build.sh` as an artifact. Jobs
+`kodi-addon-checker --branch omega` on both add-ons and uploads the zip from `build.sh` and
+the repository tree (`pages`) as artifacts. Jobs
 run on the runner named by the `RUNNER_LABELS` repository variable (JSON list of labels; the
 self-hosted runner while the repository is private), GitHub-hosted `ubuntu-latest` when unset.
 
@@ -104,3 +114,11 @@ filtered by script and language names only.
   playback fails with "Could not connect to server". Not this add-on's bug.
 - Driving the Kodi GUI in tests: `GUI.ActivateWindow` is refused while a modal dialog is
   open; `Container.Update(url)` via `scripts/kodi_builtin.py` is more reliable.
+- Kodi repository over HTTP: Kodi reads a folder by the links in its HTML whose text equals
+  the href, and caches the result for the session; a file not linked there is "not found"
+  afterwards (the repository failed to read `addons.xml.md5` right after "Install from zip").
+  Every folder's `index.html` links all its files (a landing page must keep that list). Kodi
+  opens a zip on an HTTP source with Range requests: `python -m http.server` cannot serve
+  it (Kodi 21.3 crashed on it in a test), `scripts/serve_repo.py` and GitHub Pages can.
+- Kodi's mirror redirector may send add-on downloads (plugin.video.youtube) to a mirror that a
+  network cannot reach; a test Kodi then cannot install dependencies from the official repo.

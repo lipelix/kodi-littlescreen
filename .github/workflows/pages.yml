@@ -1,0 +1,73 @@
+name: Pages
+
+# Publishes the Kodi repository (scripts/build_repo.py) to
+# https://lipelix.github.io/kodi-littlescreen/ when a v* tag is pushed.
+# The tag must match the add-on version: v1.0.0 <-> version="1.0.0".
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ${{ vars.RUNNER_LABELS && fromJSON(vars.RUNNER_LABELS) || 'ubuntu-latest' }}
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install tools
+        run: |
+          python -m venv .venv
+          .venv/bin/pip install --quiet --disable-pip-version-check -r requirements-dev.txt
+
+      - name: Tag matches the add-on version
+        if: github.ref_type == 'tag'
+        run: |
+          version=$(sed -n 's/.*<addon id="plugin.video.littlescreen"[^>]* version="\([^"]*\)".*/\1/p' \
+            plugin.video.littlescreen/addon.xml)
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match add-on version $version"
+            exit 1
+          fi
+
+      - name: Checks
+        run: |
+          .venv/bin/ruff check --output-format=github .
+          .venv/bin/ruff format --check .
+          .venv/bin/python -m pytest -q
+          .venv/bin/kodi-addon-checker --branch omega plugin.video.littlescreen
+          .venv/bin/kodi-addon-checker --branch omega repository.littlescreen
+
+      - name: Build the repository tree
+        run: .venv/bin/python scripts/build_repo.py --out _site
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
