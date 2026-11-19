@@ -1,6 +1,6 @@
 # Plan 1: public release on GitHub Pages
 
-Status: in progress — Tasks 1–5 done (2026-11-19)
+Status: in progress — Tasks 1–6 done (2026-11-19); README screenshots follow Task 7 (#25)
 
 ## Goal
 
