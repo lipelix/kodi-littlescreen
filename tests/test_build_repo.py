@@ -89,6 +89,16 @@ def test_repository_zip_at_root_and_linked(tree):
         assert f'href="{name}"' in f.read()
 
 
+def test_every_folder_links_all_its_files(tree):
+    # Kodi caches a browsed HTTP folder: a file not linked is "not found" afterwards.
+    for dirpath, dirnames, filenames in os.walk(tree):
+        with open(os.path.join(dirpath, "index.html")) as f:
+            html = f.read()
+        for name in [d + "/" for d in dirnames] + [n for n in filenames if n != "index.html"]:
+            # exactly once, or Kodi lists the file twice
+            assert html.count(f'<a href="{name}">{name}</a>') == 1, (dirpath, name)
+
+
 def test_zips_are_reproducible(tree, tmp_path):
     again = build_repo.build(ROOT, str(tmp_path / "again"))
     for addon_id in build_repo.ADDONS:

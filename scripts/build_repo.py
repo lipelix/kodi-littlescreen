@@ -8,9 +8,9 @@ Writes into OUT (default dist/pages, emptied first):
     <id>/<id>-<version>.zip (+ .sha256)          each add-on (datadir, hashes)
     <id>/<assets>                                icon/fanart shown before installing
     repository.littlescreen-<version>.zip        the repository add-on, for "Install from zip"
-    index.html                                   links to the zip (Kodi's file manager and
-                                                 browsers read it; GitHub Pages has no
-                                                 directory listing)
+    index.html (in every folder)                 links to all files: Kodi's file manager
+                                                 browses the folders by them (GitHub Pages
+                                                 has no directory listing)
 
 Zips are reproducible: sorted entries, fixed timestamps, no caches.
 --url serves the tree from somewhere else than GitHub Pages (e.g. http://127.0.0.1:8765/ to
@@ -104,23 +104,56 @@ def write(path, text):
         f.write(text)
 
 
-def index_html(repo_zip):
+def listing(folder):
+    """Links to everything in FOLDER, folders with a trailing slash.
+
+    Kodi reads an HTTP folder by its links and keeps only those whose text equals the
+    href, so other links on the page do not show up in Kodi. It caches what it read: a
+    file missing here is "not found" for the rest of the session, so after "Install from
+    zip" on this folder the repository could not read addons.xml.md5 until Kodi restarted.
+    """
+    names = []
+    for name in sorted(os.listdir(folder)):
+        if name == "index.html":
+            continue
+        names.append(name + "/" if os.path.isdir(os.path.join(folder, name)) else name)
+    return "\n".join(f'<li><a href="{n}">{n}</a></li>' for n in names)
+
+
+def page(title, body):
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Little Screen: Kodi repository</title>
+<title>{title}</title>
 </head>
 <body>
-<h1>Little Screen</h1>
-<p>Kodi repository of Little Screen, the YouTube Kids catalogue on Kodi.
-Unofficial, not affiliated with YouTube or Google.</p>
-<p><a href="{repo_zip}">{repo_zip}</a></p>
-<p><a href="https://github.com/lipelix/kodi-littlescreen">Source on GitHub</a></p>
+{body}
 </body>
 </html>
 """
+
+
+def write_indexes(out, repo_zip):
+    """index.html in every folder (GitHub Pages has no directory listing)."""
+    for dirpath, _dirnames, _filenames in os.walk(out):
+        rel = os.path.relpath(dirpath, out).replace(os.sep, "/")
+        files = f"<ul>\n{listing(dirpath)}\n</ul>"
+        if rel == ".":
+            body = f"""<h1>Little Screen</h1>
+<p>Kodi repository of Little Screen, the YouTube Kids catalogue on Kodi.
+Unofficial, not affiliated with YouTube or Google.</p>
+<p><a href="{repo_zip}">Download the repository</a>, install it with Add-ons /
+Install from zip file, then Little Screen from Add-ons / Install from repository.</p>
+<p><a href="https://github.com/lipelix/kodi-littlescreen">Source on GitHub</a></p>
+<h2>Files</h2>
+{files}"""
+            title = "Little Screen: Kodi repository"
+        else:
+            body = f"<h1>{rel}/</h1>\n{files}"
+            title = f"Little Screen: {rel}/"
+        write(os.path.join(dirpath, "index.html"), page(title, body))
 
 
 def clean_out(out):
@@ -161,7 +194,7 @@ def build(src, out, url=PAGES_URL):
         + "\n</addons>\n",
     )
     write(addons_xml + ".md5", file_hash(addons_xml, "md5") + "\n")
-    write(os.path.join(out, "index.html"), index_html(repo_zip))
+    write_indexes(out, repo_zip)
     return out
 
 

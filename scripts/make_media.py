@@ -1,5 +1,7 @@
 """Draw the add-on artwork: icon, fanart and 16:9 tiles for categories and profiles.
 
+The icon and fanart are copied to repository.littlescreen too.
+
 Run with Pillow installed: .venv/bin/python scripts/make_media.py
 Tiles are 16:9 because Estuary's Wall view shows video thumbnails in that shape.
 """
@@ -7,10 +9,12 @@ Tiles are 16:9 because Estuary's Wall view shows video thumbnails in that shape.
 import math
 import os
 import random
+import shutil
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 ROOT = os.path.join(os.path.dirname(__file__), "..", "plugin.video.littlescreen", "resources")
+REPOSITORY = os.path.join(os.path.dirname(__file__), "..", "repository.littlescreen")
 MEDIA = os.path.join(ROOT, "media")
 FONT = "/System/Library/Fonts/Supplemental/Arial Rounded Bold.ttf"
 SS = 4  # supersampling
@@ -239,6 +243,9 @@ def main():
     tile("#90A4AE", g_play, "default.png")
     icon()
     fanart()
+    # The repository add-on wears the same artwork.
+    for name in ("icon.png", "fanart.jpg"):
+        shutil.copyfile(os.path.join(ROOT, name), os.path.join(REPOSITORY, name))
 
 
 if __name__ == "__main__":
