@@ -66,7 +66,9 @@ icon and repository name; descriptions may say it shows the YouTube Kids catalog
   `xbmc.python` is 3.0.1 (Kodi 20): the `ListItem.getVideoInfoTag()` setters the add-on uses
   came with Kodi 20; Kodi 21 has 3.0.1 too, Kodi 22 3.1.1.
 - Profiles (up to 3) live in the add-on settings: name (empty = the localised age group), age
-  group, look (big pictures for toddlers = Estuary Wall view 500, no text, no search; or a list = WideList 55, with search).
+  group, look (big pictures for toddlers = Estuary Wall view 500, no search, video tiles without
+  titles: empty ListItem label plus sort label mask `%L`, since Kodi's default mask `%T` shows
+  the info tag's title, which stays for the player; or a list = WideList 55, with search).
 
 ## Commands
 

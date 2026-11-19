@@ -169,7 +169,9 @@ def install():
     xbmcplugin.setContent = lambda handle, content: STATE.__setitem__("content", content)
     xbmcplugin.setPluginCategory = lambda handle, cat: STATE.__setitem__("category", cat)
     xbmcplugin.SORT_METHOD_UNSORTED = 0
-    xbmcplugin.addSortMethod = lambda handle, method: STATE.__setitem__("sort", method)
+    xbmcplugin.addSortMethod = lambda handle, method, labelMask="", label2Mask="": STATE.update(
+        sort=method, label_mask=labelMask, label2_mask=label2Mask
+    )
 
     xbmcaddon = types.ModuleType("xbmcaddon")
     xbmcaddon.Addon = Addon
