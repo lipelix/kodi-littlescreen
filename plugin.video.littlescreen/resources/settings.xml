@@ -10,7 +10,7 @@
                 </setting>
                 <setting id="profile1.name" type="string" label="30011">
                     <level>0</level>
-                    <default>Batole</default>
+                    <default></default>
                     <constraints><allowempty>true</allowempty></constraints>
                     <dependencies><dependency type="enable" setting="profile1.enabled">true</dependency></dependencies>
                     <control type="edit" format="string"><heading>30011</heading></control>
@@ -62,7 +62,7 @@
                 </setting>
                 <setting id="profile2.name" type="string" label="30011">
                     <level>0</level>
-                    <default>Předškolák</default>
+                    <default></default>
                     <constraints><allowempty>true</allowempty></constraints>
                     <dependencies><dependency type="enable" setting="profile2.enabled">true</dependency></dependencies>
                     <control type="edit" format="string"><heading>30011</heading></control>
@@ -114,7 +114,7 @@
                 </setting>
                 <setting id="profile3.name" type="string" label="30011">
                     <level>0</level>
-                    <default>Starší</default>
+                    <default></default>
                     <constraints><allowempty>true</allowempty></constraints>
                     <dependencies><dependency type="enable" setting="profile3.enabled">true</dependency></dependencies>
                     <control type="edit" format="string"><heading>30011</heading></control>
@@ -163,8 +163,9 @@
             <group id="language" label="30020">
                 <setting id="video_language" type="integer" label="30023" help="30046">
                     <level>0</level>
-                    <default>2</default>
+                    <default>3</default>
                     <constraints><options>
+                        <option label="30028">3</option>
                         <option label="30024">0</option>
                         <option label="30025">1</option>
                         <option label="30026">2</option>
@@ -173,12 +174,14 @@
                 </setting>
                 <setting id="hl" type="string" label="30021" help="30044">
                     <level>0</level>
-                    <default>cs</default>
+                    <default></default>
+                    <constraints><allowempty>true</allowempty></constraints>
                     <control type="edit" format="string"><heading>30021</heading></control>
                 </setting>
                 <setting id="gl" type="string" label="30022" help="30045">
                     <level>0</level>
-                    <default>CZ</default>
+                    <default></default>
+                    <constraints><allowempty>true</allowempty></constraints>
                     <control type="edit" format="string"><heading>30022</heading></control>
                 </setting>
             </group>

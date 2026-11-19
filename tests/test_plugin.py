@@ -21,6 +21,7 @@ def kodi(tmp_path, fixture, monkeypatch):
     class FakeClient:
         def __init__(self, age_group, hl, gl, cache_file):
             self.age_group = age_group
+            calls.append(("client", hl, gl))
 
         def home(self, params=None):
             calls.append(("home", self.age_group, params))
@@ -47,7 +48,15 @@ def kodi(tmp_path, fixture, monkeypatch):
 
     monkeypatch.setattr(plugin, "KidsClient", FakeClient)
 
-    def run(query="", settings=None, keyboard=None, skin="skin.estuary", shown=True):
+    def run(
+        query="",
+        settings=None,
+        keyboard=None,
+        skin="skin.estuary",
+        shown=True,
+        kodi_settings=None,
+        kodi_language="en",
+    ):
         kodistub.reset(
             settings or SETTINGS,
             ADDON,
@@ -55,6 +64,8 @@ def kodi(tmp_path, fixture, monkeypatch):
             skin=skin,
             keyboard=keyboard,
             folder_path=BASE + query if shown else None,
+            kodi_settings=kodi_settings,
+            kodi_language=kodi_language,
         )
         plugin.run([BASE, "1", query])
         return kodistub.STATE
@@ -70,7 +81,7 @@ def query(url):
 def test_start_lists_profiles_as_wall(kodi):
     state = kodi()
     labels = [item.label for _, item, _ in state["items"]]
-    assert labels == ["Batole", "#2"]
+    assert labels == ["Batole", "#30051"]
     assert query(state["items"][0][0]) == {"action": "home", "p": "1"}
     assert state["items"][0][1].art["thumb"].endswith("profile_preschool.png")
     assert state["builtins"] == ["Container.SetViewMode(500)"]
@@ -176,7 +187,7 @@ def test_api_failure_notifies(kodi, monkeypatch):
 
 def test_disabled_profile_falls_back_to_start(kodi):
     state = kodi("?action=home&p=3")
-    assert [item.label for _, item, _ in state["items"]] == ["Batole", "#2"]
+    assert [item.label for _, item, _ in state["items"]] == ["Batole", "#30051"]
 
 
 def test_other_skin_keeps_view(kodi):
@@ -211,6 +222,52 @@ def test_czech_only_hides_slovak_videos(kodi):
     assert slovak in everything and slovak not in czech
     assert "Míša Růžičková - Paci paci - Písničky pro děti" in czech
     assert 0 < len(czech) < len(everything)
+
+
+AUTOMATIC = {**SETTINGS, "hl": "", "gl": "", "video_language": 3}
+GERMAN_KODI = {"locale.language": "resource.language.de_de", "locale.country": "Österreich"}
+CZECH_KODI = {"locale.language": "resource.language.cs_cz", "locale.country": "Česko"}
+LANGINFO_DE = """<langinfo><regions>
+<region name="Deutschland" locale="DE"/><region name="Österreich" locale="AT"/>
+</regions></langinfo>"""
+
+
+def clients(kodi):
+    return {call[1:] for call in kodi.calls if call[0] == "client"}
+
+
+def test_empty_language_and_region_follow_kodi(kodi, monkeypatch):
+    read = []
+    monkeypatch.setattr(plugin, "read_text", lambda path: read.append(path) or LANGINFO_DE)
+    kodi("?action=home&p=2", settings=AUTOMATIC, kodi_settings=GERMAN_KODI, kodi_language="de")
+    assert clients(kodi) == {("de", "AT")}
+    assert read == ["special://home/addons/resource.language.de_de/resources/langinfo.xml"]
+
+
+def test_region_falls_back_to_the_kodi_language(kodi):
+    kodi("?action=home&p=2", settings=AUTOMATIC, kodi_settings=GERMAN_KODI, kodi_language="de")
+    assert clients(kodi) == {("de", "DE")}
+
+
+def test_manual_language_and_region_win(kodi):
+    settings = {**AUTOMATIC, "hl": "sk", "gl": "sk"}
+    kodi("?action=home&p=2", settings=settings, kodi_settings=GERMAN_KODI, kodi_language="de")
+    assert clients(kodi) == {("sk", "SK")}
+
+
+def test_unreadable_kodi_settings_fall_back_to_english_us(kodi):
+    kodi("?action=home&p=2", settings=AUTOMATIC, kodi_settings={}, kodi_language="")
+    assert clients(kodi) == {("en", "US")}
+
+
+def test_automatic_filter_is_czech_only_for_a_czech_catalogue(kodi):
+    category = "?action=category&p=2&c=kgQCCAM%253D"
+    slovak = "Keď si šťastný | Slovenské detské pesničky | Keď si šťastný"
+    czech = labels(kodi(category, settings=AUTOMATIC, kodi_settings=CZECH_KODI, kodi_language="cs"))
+    german = labels(
+        kodi(category, settings=AUTOMATIC, kodi_settings=GERMAN_KODI, kodi_language="de")
+    )
+    assert slovak not in czech and slovak in german
 
 
 def test_filtered_page_is_topped_up_from_next_pages(kodi, monkeypatch):

@@ -1,5 +1,6 @@
 """Kodi directory listings for Little Screen (the YouTube Kids catalogue)."""
 
+import json
 import os
 import re
 from concurrent.futures import ThreadPoolExecutor
@@ -11,8 +12,8 @@ import xbmcgui
 import xbmcplugin
 import xbmcvfs
 
-from littlescreen import catalog, language
-from littlescreen.innertube import InnerTubeError, KidsClient
+from littlescreen import catalog, language, region
+from littlescreen.innertube import AGE_GROUPS, InnerTubeError, KidsClient
 from littlescreen.profiles import find_profile, load_profiles
 from littlescreen.videocache import VideoCache
 
@@ -36,6 +37,7 @@ S_LOAD_FAILED = 30032
 S_NO_PROFILE = 30033
 S_NOTHING_FOUND = 30034
 S_WHO = 30035
+S_AGE_NAMES = (30050, 30051, 30052)  # by AGE_GROUPS
 
 
 class Plugin:
@@ -50,8 +52,12 @@ class Plugin:
             xbmcvfs.translatePath(self.addon.getAddonInfo("path")), "resources", "media"
         )
         self.profiles = load_profiles(
-            self.addon.getSettingBool, self.addon.getSettingInt, self.addon.getSettingString
+            self.addon.getSettingBool,
+            self.addon.getSettingInt,
+            self.addon.getSettingString,
+            age_label=lambda age: self.tr(S_AGE_NAMES[AGE_GROUPS.index(age)]),
         )
+        self._locale = None
 
     # -- helpers ----------------------------------------------------------
 
@@ -75,12 +81,28 @@ class Plugin:
             self._clients[profile.slot] = self.new_client(profile)
         return self._clients[profile.slot]
 
+    def locale(self):
+        """(hl, gl) of the catalogue: the add-on settings, or Kodi's language and region."""
+        if self._locale is None:
+            self._locale = region.resolve(
+                self.addon.getSettingString("hl"),
+                self.addon.getSettingString("gl"),
+                kodi_hl=lambda: region.kodi_language(
+                    xbmc.getLanguage(xbmc.ISO_639_1), kodi_setting("locale.language")
+                ),
+                kodi_gl=lambda: region.kodi_region(
+                    kodi_setting("locale.language"), kodi_setting("locale.country"), read_text
+                ),
+            )
+            xbmc.log(
+                f"{LOG_PREFIX} catalogue hl={self._locale[0]} gl={self._locale[1]}", xbmc.LOGDEBUG
+            )
+        return self._locale
+
     def new_client(self, profile):
+        hl, gl = self.locale()
         return KidsClient(
-            age_group=profile.age_group,
-            hl=self.addon.getSettingString("hl"),
-            gl=self.addon.getSettingString("gl"),
-            cache_file=self.data_file("client.json"),
+            age_group=profile.age_group, hl=hl, gl=gl, cache_file=self.data_file("client.json")
         )
 
     def folder(self, label, url, image, fanart=None, is_folder=True):
@@ -311,7 +333,7 @@ class Plugin:
         xbmc.Player().play(playlist)
 
     def list_page(self, profile, page, kind, channel_tiles=False):
-        mode = self.addon.getSettingInt("video_language")
+        mode = language.filter_mode(self.addon.getSettingInt("video_language"), self.locale()[0])
         memory = language.ChannelMemory(self.data_file("channels.json"), profile.age_group)
         page = self.filter_language(profile, page, kind, memory, mode)
         if channel_tiles:
@@ -372,6 +394,31 @@ def same_listing(a, b):
     base_a, _, query_a = a.partition("?")
     base_b, _, query_b = b.partition("?")
     return base_a == base_b and dict(parse_qsl(query_a)) == dict(parse_qsl(query_b))
+
+
+def kodi_setting(setting_id):
+    """A Kodi (not add-on) setting's value over JSON-RPC, or None."""
+    request = {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "Settings.GetSettingValue",
+        "params": {"setting": setting_id},
+    }
+    try:
+        response = json.loads(xbmc.executeJSONRPC(json.dumps(request)))
+        return response["result"]["value"]
+    except (ValueError, KeyError, TypeError):
+        xbmc.log(f"{LOG_PREFIX} cannot read Kodi setting {setting_id}", xbmc.LOGWARNING)
+        return None
+
+
+def read_text(path):
+    """A file's text (special:// paths too), or None when it does not exist."""
+    path = xbmcvfs.translatePath(path)
+    if not os.path.exists(path):
+        return None
+    with open(path, encoding="utf-8") as fh:
+        return fh.read()
 
 
 def run(argv):

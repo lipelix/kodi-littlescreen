@@ -1,12 +1,22 @@
 """Minimal fake Kodi modules (xbmc, xbmcgui, xbmcplugin, xbmcaddon, xbmcvfs) for tests."""
 
+import json
 import sys
 import types
 
 STATE = {}
 
 
-def reset(settings, path, profile_dir, skin="skin.estuary", keyboard=None, folder_path=None):
+def reset(
+    settings,
+    path,
+    profile_dir,
+    skin="skin.estuary",
+    keyboard=None,
+    folder_path=None,
+    kodi_settings=None,
+    kodi_language="en",
+):
     STATE.clear()
     STATE.update(
         settings=settings,
@@ -23,6 +33,8 @@ def reset(settings, path, profile_dir, skin="skin.estuary", keyboard=None, folde
         dialogs=[],
         opened_settings=False,
         folder_path=folder_path,
+        kodi_settings=kodi_settings or {},
+        kodi_language=kodi_language,
     )
 
 
@@ -95,6 +107,17 @@ class Keyboard:
         return STATE["keyboard"] or ""
 
 
+def execute_jsonrpc(request):
+    request = json.loads(request)
+    assert request["method"] == "Settings.GetSettingValue", request
+    setting = request["params"]["setting"]
+    if setting not in STATE["kodi_settings"]:
+        return json.dumps({"id": 1, "jsonrpc": "2.0", "error": {"code": -32602}})
+    return json.dumps(
+        {"id": 1, "jsonrpc": "2.0", "result": {"value": STATE["kodi_settings"][setting]}}
+    )
+
+
 class PlayList:
     def __init__(self, kind):
         STATE.setdefault("playlist", [])
@@ -113,7 +136,12 @@ class Player:
 
 def install():
     xbmc = types.ModuleType("xbmc")
+    xbmc.LOGDEBUG = 0
+    xbmc.LOGWARNING = 2
     xbmc.LOGERROR = 4
+    xbmc.ISO_639_1 = 0
+    xbmc.getLanguage = lambda fmt=None, region=False: STATE["kodi_language"]
+    xbmc.executeJSONRPC = execute_jsonrpc
     xbmc.log = lambda msg, level=0: None
     xbmc.getSkinDir = lambda: STATE["skin"]
     xbmc.executebuiltin = lambda cmd: STATE["builtins"].append(cmd)
