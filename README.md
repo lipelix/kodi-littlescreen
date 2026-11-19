@@ -10,6 +10,26 @@ Little Screen is **unofficial** and not affiliated with, endorsed by or sponsore
 or Google. It reads the same public interface as youtubekids.com, signed out, and plays the
 videos through the [YouTube add-on](https://github.com/anxdpanic/plugin.video.youtube).
 
+## Screenshots
+
+<table>
+<tr>
+<td width="50%"><img src="docs/screenshots/profiles.jpg" alt="Kodi showing Little Screen's profile picker: two tiles, Ages 4 and under and Ages 5 to 8"><br>
+Who is watching? One tile per profile.</td>
+<td width="50%"><img src="docs/screenshots/big-pictures.jpg" alt="The Shows category in the big-pictures look: a wall of large video thumbnails"><br>
+Big pictures for the youngest (ages 4 and under).</td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/screenshots/list.jpg" alt="The Shows category as a list: video titles with durations, the picked video's thumbnail and channel on the left"><br>
+A list with titles and channels (ages 5 to 8).</td>
+<td width="50%"><img src="docs/screenshots/search.jpg" alt="Search results for dinosaurs in the list look: videos and two channels"><br>
+Search inside the YouTube Kids catalogue.</td>
+</tr>
+</table>
+
+Kodi 21 with its default skin, English, default add-on settings. Taken by
+`scripts/screenshots.sh` (headless Kodi in Docker).
+
 ## Install
 
 Little Screen comes from its own Kodi repository at
@@ -129,6 +149,7 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
 ./scripts/build.sh                        # dist/plugin.video.littlescreen-<version>.zip
 .venv/bin/python scripts/build_repo.py    # dist/pages: the Kodi repository
 ./scripts/check-kodi-versions.sh          # Kodi 20, 21, 22 headless in Docker: list and play
+./scripts/screenshots.sh                  # docs/screenshots from a clean Kodi 21 in Docker
 ```
 
 ## Licence

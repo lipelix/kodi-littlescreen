@@ -112,7 +112,9 @@ def test_landing_page(tree):
     entries = {n + "/" if os.path.isdir(os.path.join(tree, n)) else n for n in os.listdir(tree)}
     assert kodi_links == entries - {"index.html"}
     # what the page shows is in the tree
-    for src in re.findall(r'(?:src|href)="(plugin\.video\.littlescreen/[^"]+)"', html):
+    shown = re.findall(r'(?:src|href)="((?:plugin\.video\.littlescreen|screenshots)/[^"]+)"', html)
+    assert [s for s in shown if s.startswith("screenshots/")]
+    for src in shown:
         assert os.path.isfile(os.path.join(tree, src)), src
 
 
