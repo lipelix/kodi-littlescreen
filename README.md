@@ -60,7 +60,7 @@ on, Little Screen asks "Who is watching?"; with one, it opens it straight away.
 | Show this profile | Turns the profile on or off. Profiles 1 and 2 are on at first. |
 | Name | Shown on the profile tile. Empty: the age group ("Ages 4 and under", ...). |
 | Age group | **4 and under**, **5 to 8** or **9 to 12**. YouTube Kids picks the videos for it. |
-| Look | **Big pictures (toddlers)**: large tiles, no text, no search. **List with titles**: titles, channel names, search. |
+| Look | **Big pictures (toddlers)**: large video tiles without titles (categories and channels keep their names), no search. **List with titles**: titles, channel names, search. |
 | Allow search | Search inside the YouTube Kids catalogue for this age (list look only). |
 | Play the next video automatically | See [Autoplay](#autoplay). On at first. |
 

@@ -126,6 +126,24 @@ def test_category_lists_playable_videos_via_youtube_addon(kodi):
     assert state["content"] == "videos" and state["category"] == "Hudba"
 
 
+def test_toddler_videos_have_no_label(kodi):
+    state = kodi("?action=category&p=1&c=kgQCCAM%253D")
+    videos = [item for _, item, is_folder in state["items"] if not is_folder]
+    assert videos and all(item.label == "" for item in videos)
+    assert all(item.tag.data["title"] for item in videos)  # for the player
+    # Kodi's default label mask (%T) would show the title from the info tag.
+    assert state["label_mask"] == "%L" and state["label2_mask"] == "%D"
+    channels = [item for _, item, is_folder in state["items"] if is_folder]
+    assert all(item.label for item in channels)
+
+
+def test_list_videos_keep_titles_and_default_mask(kodi):
+    state = kodi("?action=category&p=2&c=kgQCCAM%253D")
+    videos = [item for _, item, is_folder in state["items"] if not is_folder]
+    assert all(item.label == item.tag.data["title"] != "" for item in videos)
+    assert state["label_mask"] == ""
+
+
 def test_channels_open_as_folders(kodi):
     state = kodi("?action=category&p=2&c=kgQCCAM%253D")
     folders = [(url, item) for url, item, is_folder in state["items"] if is_folder]
@@ -212,7 +230,8 @@ def test_same_listing_ignores_parameter_order():
 
 
 def labels(state):
-    return [item.label for _, item, _ in state["items"]]
+    """Titles of the listed items (toddler videos have an empty label)."""
+    return [item.tag.data["title"] for _, item, _ in state["items"]]
 
 
 def test_czech_only_hides_slovak_videos(kodi):
@@ -469,8 +488,8 @@ def test_queue_shows_titles_of_listed_videos(kodi):
     first_url, first_item, _ = next(i for i in listing["items"] if not i[2])
     state = kodi("?" + first_url.split("?", 1)[1], settings=AUTOPLAY)
     queued = [item for _, item in state["playlist"]]
-    assert queued[0].label == first_item.label != ""
-    assert queued[0].tag.data["title"] == first_item.label
+    assert queued[0].label == first_item.tag.data["title"] != ""
+    assert queued[0].tag.data["title"] == first_item.tag.data["title"]
     assert queued[0].tag.data["duration"] > 0
     assert all(item.label for item in queued)
 

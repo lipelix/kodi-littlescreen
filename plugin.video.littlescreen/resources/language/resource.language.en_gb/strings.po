@@ -132,7 +132,7 @@ msgid "YouTube Kids picks videos suitable for this age."
 msgstr ""
 
 msgctxt "#30042"
-msgid "Big pictures: no text, no search. List: titles, channel names and search."
+msgid "Big pictures: videos without titles, no search. List: titles, channel names and search."
 msgstr ""
 
 msgctxt "#30043"

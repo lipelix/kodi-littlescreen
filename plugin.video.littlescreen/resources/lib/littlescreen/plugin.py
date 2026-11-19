@@ -122,7 +122,13 @@ class Plugin:
     def finish(self, profile, title, cache=True):
         xbmcplugin.setPluginCategory(self.handle, title)
         xbmcplugin.setContent(self.handle, "videos")
-        xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_UNSORTED)
+        if profile is not None and profile.toddler:
+            # Kodi's default label mask is the info tag's title (%T): show the label instead.
+            xbmcplugin.addSortMethod(
+                self.handle, xbmcplugin.SORT_METHOD_UNSORTED, labelMask="%L", label2Mask="%D"
+            )
+        else:
+            xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_UNSORTED)
         xbmcplugin.endOfDirectory(self.handle, cacheToDisc=cache)
         if xbmc.getSkinDir() == ESTUARY and self.wait_for_container():
             toddler = profile is None or profile.toddler
@@ -368,8 +374,11 @@ class Plugin:
             )
         self.finish(profile, page.title or profile.name)
 
-    def video_item(self, profile, video):
-        item = xbmcgui.ListItem(video.title, offscreen=True)
+    def video_item(self, profile, video, listed=False):
+        """A video's ListItem. Listed for a toddler profile it has no label (big pictures
+        without text); the title stays in the info tag for the player and the queue."""
+        label = "" if listed and profile.toddler else video.title
+        item = xbmcgui.ListItem(label, offscreen=True)
         item.setArt({"thumb": video.thumbnail, "icon": video.thumbnail, "fanart": video.thumbnail})
         tag = item.getVideoInfoTag()
         tag.setMediaType("video")
@@ -381,7 +390,7 @@ class Plugin:
         return item
 
     def add_video(self, profile, video, queue):
-        item = self.video_item(profile, video)
+        item = self.video_item(profile, video, listed=True)
         if profile.autoplay:
             # Not playable itself: Kodi runs it like RunPlugin and play() starts the queue.
             url = self.url(action="play", p=profile.slot, v=",".join(queue))

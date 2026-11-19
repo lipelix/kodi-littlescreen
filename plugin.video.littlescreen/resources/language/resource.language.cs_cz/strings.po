@@ -132,8 +132,8 @@ msgid "YouTube Kids picks videos suitable for this age."
 msgstr "YouTube Kids vybírá videa vhodná pro tento věk."
 
 msgctxt "#30042"
-msgid "Big pictures: no text, no search. List: titles, channel names and search."
-msgstr "Velké obrázky: bez textu a bez hledání. Seznam: názvy, kanály a hledání."
+msgid "Big pictures: videos without titles, no search. List: titles, channel names and search."
+msgstr "Velké obrázky: videa bez názvů, bez hledání. Seznam: názvy, kanály a hledání."
 
 msgctxt "#30043"
 msgid "Searches only the YouTube Kids catalogue for this age."
