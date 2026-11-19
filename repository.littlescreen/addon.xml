@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="repository.littlescreen" name="Little Screen repository" version="1.0.0" provider-name="lipelix">
+    <extension point="xbmc.addon.repository" name="Little Screen repository">
+        <dir>
+            <info compressed="false">https://lipelix.github.io/kodi-littlescreen/addons.xml</info>
+            <checksum>https://lipelix.github.io/kodi-littlescreen/addons.xml.md5</checksum>
+            <datadir zip="true">https://lipelix.github.io/kodi-littlescreen/</datadir>
+            <hashes>sha256</hashes>
+        </dir>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Installs and updates Little Screen</summary>
+        <summary lang="cs_CZ">Instaluje a aktualizuje Little Screen</summary>
+        <description lang="en_GB">The Kodi repository of Little Screen, the YouTube Kids catalogue for children on Kodi. Install this first, then Little Screen from Add-ons / Install from repository; Kodi keeps it up to date. Unofficial, not affiliated with YouTube or Google.</description>
+        <description lang="cs_CZ">Repozitář Kodi pro Little Screen, katalog YouTube Kids pro děti v Kodi. Nainstalujte nejdřív tento repozitář, pak Little Screen z Doplňky / Instalovat z repozitáře; Kodi ho bude aktualizovat. Neoficiální, nemá nic společného s YouTube ani Googlem.</description>
+        <platform>all</platform>
+        <license>MIT</license>
+        <source>https://github.com/lipelix/kodi-littlescreen</source>
+        <website>https://lipelix.github.io/kodi-littlescreen/</website>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>
