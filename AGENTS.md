@@ -11,6 +11,12 @@ icon and repository name; descriptions may say it shows the YouTube Kids catalog
   `kidsAppInfo.contentSettings.corpusPreference`: `PRESCHOOL` (4 and under), `YOUNGER` (5–8),
   `TWEEN` (9–12). `OLDER` is rejected by the API. The client version is scraped from the page
   and cached for a day in the add-on profile (`client.json`); a failed request refreshes it once.
+- `region.py` picks `hl`/`gl`: the add-on settings when filled in, otherwise Kodi's
+  interface language (`xbmc.getLanguage(ISO_639_1)`) and region. The region is the `locale`
+  attribute of the `<region>` named by Kodi's `locale.country` in the language add-on's
+  `langinfo.xml` (fallback: the country in its id, `resource.language.de_de` → DE).
+  Languages YouTube Kids rejects with HTTP 400 (cy, eo, mt, ...) fall back to `en`; any `gl`
+  is accepted.
 - `catalog.py` walks responses for `compactVideoRenderer` / `compactChannelRenderer` and
   continuation tokens instead of following exact paths. Home = `browse FEkids_home`; each
   category is the same browse with the anchor's `params`.
@@ -22,8 +28,9 @@ icon and repository name; descriptions may say it shows the YouTube Kids catalog
   common words, language names in channel names ("• Čeština", "Polski"). Titles without
   markers take their channel's language, learned across runs in `channels.json` in the add-on
   profile; a channel still unclear has its own page read once (up to 8 per listing, in
-  parallel) and is marked "probed" in the same file. Setting `video_language`: 0 all, 1 all but Slovak, 2 Czech only (default; unclear
-  stays). A filtered page is topped up from up to 3 next pages. The word lists must not
+  parallel) and is marked "probed" in the same file. Setting `video_language`: 0 all, 1 all
+  but Slovak, 2 Czech only (unclear stays), 3 automatic (default: Czech only when `hl` is
+  Czech, otherwise all). A filtered page is topped up from up to 3 next pages. The word lists must not
   overlap (test); add new markers with a real title as a test case.
 - A category is a fixed set of ~36 items with no continuation (repeated calls add little),
   so `channel_tiles()` appends a tile for each channel behind its videos (art = one of its
@@ -35,8 +42,8 @@ icon and repository name; descriptions may say it shows the YouTube Kids catalog
   video and the following ones of the same listing (max 50), each through plugin.video.youtube.
   Kodi's own "play next item" setting is global by content type ("videos" = uncategorized),
   so it would also hit other add-ons; YouTube's "suggested videos" would leave the Kids catalogue.
-- Profiles (up to 3) live in the add-on settings: name, age group, look (big pictures for
-  toddlers = Estuary Wall view 500, no text, no search; or a list = WideList 55, with search).
+- Profiles (up to 3) live in the add-on settings: name (empty = the localised age group), age
+  group, look (big pictures for toddlers = Estuary Wall view 500, no text, no search; or a list = WideList 55, with search).
 
 ## Commands
 

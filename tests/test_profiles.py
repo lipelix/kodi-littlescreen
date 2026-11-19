@@ -25,7 +25,12 @@ DEFAULTS = {
 
 
 def load(settings):
-    return load_profiles(settings.__getitem__, settings.__getitem__, settings.__getitem__)
+    return load_profiles(
+        settings.__getitem__,
+        settings.__getitem__,
+        settings.__getitem__,
+        age_label=lambda age: f"<{age}>",
+    )
 
 
 def test_enabled_profiles_only():
@@ -40,8 +45,8 @@ def test_toddler_never_searches():
     assert load(DEFAULTS)[1].search is True
 
 
-def test_blank_name_falls_back_to_slot():
-    assert load(DEFAULTS)[1].name == "#2"
+def test_blank_name_falls_back_to_age_label():
+    assert load(DEFAULTS)[1].name == "<YOUNGER>"
 
 
 def test_out_of_range_age_fails():
@@ -51,7 +56,7 @@ def test_out_of_range_age_fails():
 
 def test_find_profile():
     profiles = load(DEFAULTS)
-    assert find_profile(profiles, 2).name == "#2"
+    assert find_profile(profiles, 2).name == "<YOUNGER>"
     assert find_profile(profiles, 3) is None
 
 

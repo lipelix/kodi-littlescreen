@@ -20,6 +20,7 @@ LANGS = (CS, SK, OTHER)
 SHOW_ALL = 0
 HIDE_SLOVAK = 1
 CZECH_ONLY = 2
+AUTOMATIC = 3  # Czech only for a Czech catalogue, otherwise everything
 
 LANGUAGE_NAME_WEIGHT = 3
 CHANNEL_NAME_WEIGHT = 1
@@ -375,6 +376,13 @@ def unclear_channels(items, result, memory, limit):
 
 def channel_language(memory, channel_id):
     return decide(memory.get(channel_id))
+
+
+def filter_mode(setting, hl):
+    """The filter for the `video_language` setting, given the catalogue language `hl`."""
+    if setting != AUTOMATIC:
+        return setting
+    return CZECH_ONLY if hl.split("-")[0].lower() == CS else SHOW_ALL
 
 
 def keep(lang, mode):

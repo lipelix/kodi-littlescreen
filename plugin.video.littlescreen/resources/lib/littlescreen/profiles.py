@@ -24,8 +24,11 @@ class Profile:
         return self.style == STYLE_TODDLER
 
 
-def load_profiles(get_bool, get_int, get_string):
-    """Read enabled profiles with the given settings getters (setting id -> value)."""
+def load_profiles(get_bool, get_int, get_string, age_label):
+    """Read enabled profiles with the given settings getters (setting id -> value).
+
+    A profile without a name is called by its age group: `age_label(age_group)`.
+    """
     profiles = []
     for slot in PROFILE_SLOTS:
         prefix = f"profile{slot}."
@@ -40,7 +43,7 @@ def load_profiles(get_bool, get_int, get_string):
         profiles.append(
             Profile(
                 slot=slot,
-                name=get_string(prefix + "name").strip() or f"#{slot}",
+                name=get_string(prefix + "name").strip() or age_label(AGE_GROUPS[age]),
                 age_group=AGE_GROUPS[age],
                 style=STYLES[style],
                 search=get_bool(prefix + "search") and STYLES[style] != STYLE_TODDLER,

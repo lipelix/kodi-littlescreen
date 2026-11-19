@@ -92,8 +92,8 @@ msgid "Czech only"
 msgstr "Jen česká"
 
 msgctxt "#30046"
-msgid "Guessed from titles and channel names. \"Czech only\" also hides other languages; videos whose language is unclear stay."
-msgstr "Odhaduje se z názvů videí a kanálů. „Jen česká“ skryje i jiné jazyky; videa s nejasným jazykem zůstanou."
+msgid "Guessed from titles and channel names. Automatic: Czech only for the Czech catalogue, otherwise any language. \"Czech only\" also hides other languages; videos whose language is unclear stay."
+msgstr "Odhaduje se z názvů videí a kanálů. Automaticky: pro český katalog jen česká, jinak všechna. „Jen česká“ skryje i jiné jazyky; videa s nejasným jazykem zůstanou."
 
 msgctxt "#30027"
 msgid "Play the next video automatically"
@@ -144,9 +144,25 @@ msgid "Searches only the YouTube Kids catalogue for this age."
 msgstr "Hledá jen v katalogu YouTube Kids pro tento věk."
 
 msgctxt "#30044"
-msgid "Language of titles and categories, for example cs or en."
-msgstr "Jazyk názvů a kategorií, například cs nebo en."
+msgid "Language of titles and categories, for example cs or en. Leave empty to follow Kodi's interface language."
+msgstr "Jazyk názvů a kategorií, například cs nebo en. Prázdné = podle jazyka Kodi."
 
 msgctxt "#30045"
-msgid "Country whose catalogue is shown, for example CZ or SK."
-msgstr "Země, jejíž katalog se zobrazí, například CZ nebo SK."
+msgid "Country whose catalogue is shown, for example CZ or SK. Leave empty to follow Kodi's region."
+msgstr "Země, jejíž katalog se zobrazí, například CZ nebo SK. Prázdné = podle oblasti nastavené v Kodi."
+
+msgctxt "#30028"
+msgid "Automatic"
+msgstr "Automaticky"
+
+msgctxt "#30050"
+msgid "Ages 4 and under"
+msgstr "Do 4 let"
+
+msgctxt "#30051"
+msgid "Ages 5 to 8"
+msgstr "5 až 8 let"
+
+msgctxt "#30052"
+msgid "Ages 9 to 12"
+msgstr "9 až 12 let"
