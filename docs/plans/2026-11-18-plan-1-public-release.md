@@ -1,6 +1,6 @@
 # Plan 1: public release on GitHub Pages
 
-Status: in progress — Tasks 1–7 and the README screenshots (#25) done (2026-11-19)
+Status: in progress — Tasks 1–7 and the README screenshots (#25) done; Task 8: tree and history scanned, version 1.0.0, waiting for the owner to make the repository public and switch Pages on (2026-11-19)
 
 ## Goal
 

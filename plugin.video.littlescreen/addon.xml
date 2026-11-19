@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.littlescreen" name="Little Screen" version="0.5.0" provider-name="lipelix">
+<addon id="plugin.video.littlescreen" name="Little Screen" version="1.0.0" provider-name="lipelix">
     <requires>
         <import addon="xbmc.python" version="3.0.1"/>
         <import addon="plugin.video.youtube" version="7.0.0"/>
@@ -17,7 +17,11 @@
         <platform>all</platform>
         <license>MIT</license>
         <source>https://github.com/lipelix/kodi-littlescreen</source>
-        <news>v0.5.0: first version as Little Screen.</news>
+        <news>v1.0.0: first public release.
+- Catalogue language and region follow Kodi (or the add-on settings).
+- Language filter for any catalogue: by script and language names, word by word for Czech and Slovak.
+- Channel tiles at the end of categories, autoplay of the following videos, up to three profiles.
+- Installable from the Little Screen repository; checked on Kodi 20, 21 and 22.</news>
         <assets>
             <icon>resources/icon.png</icon>
             <fanart>resources/fanart.jpg</fanart>
