@@ -1,6 +1,6 @@
 # Plan 1: public release on GitHub Pages
 
-Status: in progress — Tasks 1–3 done (2026-11-19)
+Status: in progress — Tasks 1–4 done (2026-11-19)
 
 ## Goal
 

@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    # While the repository is private, the RUNNER_LABELS repository variable picks
+    # the self-hosted runner (e.g. ["self-hosted","lipelix"]); unset = GitHub-hosted.
+    runs-on: ${{ vars.RUNNER_LABELS && fromJSON(vars.RUNNER_LABELS) || 'ubuntu-latest' }}
+    timeout-minutes: 15
+    env:
+      # no __pycache__ in the add-on tree (kodi-addon-checker warns about it)
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install tools
+        run: |
+          python -m venv .venv
+          .venv/bin/pip install --quiet --disable-pip-version-check -r requirements-dev.txt
+
+      - name: Ruff
+        run: |
+          .venv/bin/ruff check --output-format=github .
+          .venv/bin/ruff format --check .
+
+      - name: Tests (no live API)
+        run: .venv/bin/python -m pytest -q
+
+      - name: Kodi add-on checker
+        run: .venv/bin/kodi-addon-checker --branch omega plugin.video.littlescreen
+
+      - name: Build zip
+        id: build
+        run: echo "zip=$(./scripts/build.sh)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-artifact@v5
+        with:
+          name: plugin.video.littlescreen
+          path: ${{ steps.build.outputs.zip }}
+          if-no-files-found: error
