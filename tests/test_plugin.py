@@ -260,14 +260,19 @@ def test_unreadable_kodi_settings_fall_back_to_english_us(kodi):
     assert clients(kodi) == {("en", "US")}
 
 
-def test_automatic_filter_is_czech_only_for_a_czech_catalogue(kodi):
+def test_the_filter_follows_the_catalogue_language(kodi):
     category = "?action=category&p=2&c=kgQCCAM%253D"
     slovak = "Keď si šťastný | Slovenské detské pesničky | Keď si šťastný"
-    czech = labels(kodi(category, settings=AUTOMATIC, kodi_settings=CZECH_KODI, kodi_language="cs"))
-    german = labels(
+    czech = "Míša Růžičková - Paci paci - Písničky pro děti"
+    in_czech = labels(
+        kodi(category, settings=AUTOMATIC, kodi_settings=CZECH_KODI, kodi_language="cs")
+    )
+    in_german = labels(
         kodi(category, settings=AUTOMATIC, kodi_settings=GERMAN_KODI, kodi_language="de")
     )
-    assert slovak not in czech and slovak in german
+    assert czech in in_czech and slovak not in in_czech
+    # No German pack: Czech markers mean nothing, but "Slovenské" names the language.
+    assert czech in in_german and slovak not in in_german
 
 
 def test_filtered_page_is_topped_up_from_next_pages(kodi, monkeypatch):

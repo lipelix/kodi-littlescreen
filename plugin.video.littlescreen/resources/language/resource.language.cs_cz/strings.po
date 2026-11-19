@@ -83,17 +83,13 @@ msgctxt "#30024"
 msgid "Any language"
 msgstr "Všechna"
 
-msgctxt "#30025"
-msgid "All but Slovak"
-msgstr "Bez slovenských"
-
 msgctxt "#30026"
-msgid "Czech only"
-msgstr "Jen česká"
+msgid "Only the catalogue language"
+msgstr "Jen v jazyce katalogu"
 
 msgctxt "#30046"
-msgid "Guessed from titles and channel names. Automatic: Czech only for the Czech catalogue, otherwise any language. \"Czech only\" also hides other languages; videos whose language is unclear stay."
-msgstr "Odhaduje se z názvů videí a kanálů. Automaticky: pro český katalog jen česká, jinak všechna. „Jen česká“ skryje i jiné jazyky; videa s nejasným jazykem zůstanou."
+msgid "Guessed from titles and channel names. \"Only the catalogue language\" hides videos in other languages; videos whose language is unclear stay. Czech and Slovak are told apart word by word; for other languages only the script (Latin, Cyrillic, Japanese, ...) and language names count."
+msgstr "Odhaduje se z názvů videí a kanálů. „Jen v jazyce katalogu“ skryje videa v jiných jazycích; videa s nejasným jazykem zůstanou. Češtinu a slovenštinu rozliší podle slov, u ostatních jazyků rozhoduje jen písmo (latinka, cyrilice, japonština, …) a názvy jazyků."
 
 msgctxt "#30027"
 msgid "Play the next video automatically"
@@ -150,10 +146,6 @@ msgstr "Jazyk názvů a kategorií, například cs nebo en. Prázdné = podle ja
 msgctxt "#30045"
 msgid "Country whose catalogue is shown, for example CZ or SK. Leave empty to follow Kodi's region."
 msgstr "Země, jejíž katalog se zobrazí, například CZ nebo SK. Prázdné = podle oblasti nastavené v Kodi."
-
-msgctxt "#30028"
-msgid "Automatic"
-msgstr "Automaticky"
 
 msgctxt "#30050"
 msgid "Ages 4 and under"

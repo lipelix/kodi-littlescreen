@@ -23,15 +23,20 @@ icon and repository name; descriptions may say it shows the YouTube Kids catalog
 - `plugin.py` builds Kodi listings. Videos play through `plugin.video.youtube`
   (`plugin://plugin.video.youtube/play/?video_id=`), whose "suggested videos" autoplay is off
   by default, so nothing outside the Kids catalogue starts on its own.
-- `language.py` guesses each video's language (YouTube does not send it; the CZ catalogue
-  mixes Czech and Slovak): letters only one language uses (ě ř ů / ä ô ľ ĺ ŕ), differing
-  common words, language names in channel names ("• Čeština", "Polski"). Titles without
-  markers take their channel's language, learned across runs in `channels.json` in the add-on
-  profile; a channel still unclear has its own page read once (up to 8 per listing, in
-  parallel) and is marked "probed" in the same file. Setting `video_language`: 0 all, 1 all
-  but Slovak, 2 Czech only (unclear stays), 3 automatic (default: Czech only when `hl` is
-  Czech, otherwise all). A filtered page is topped up from up to 3 next pages. The word lists must not
-  overlap (test); add new markers with a real title as a test case.
+- `language.py` guesses whether a video is in the catalogue language (YouTube does not send
+  it; the CZ catalogue mixes Czech and Slovak). Evidence is kept under labels that do not
+  depend on the catalogue: language names (`name:de`; "• Čeština", "Polski", "українською"),
+  the scripts of a text (`script:CYRILLIC+LATIN`, once per text) and pack markers (`cs`):
+  letters and words only one language uses (`packs/`). `decide(counts, target)` weighs them
+  against the catalogue language (`target_language(hl)`): markers count only when it has a
+  complete pack (cs, sk); otherwise only scripts (a non-Latin script outranks Latin brand
+  names in the same text) and names, so a video whose language is unclear is never hidden.
+  Titles without evidence take their channel's language, learned across runs in
+  `channels.json` in the add-on profile; a channel still unclear has its own page read once
+  (up to 8 per listing, in parallel) and is marked "probed" in the same file. Setting
+  `video_language`: 0 any language, 2 only the catalogue language (default; unclear stays;
+  1 and 3 from earlier versions read as 2). A filtered page is topped up from up to 3 next
+  pages.
 - A category is a fixed set of ~36 items with no continuation (repeated calls add little),
   so `channel_tiles()` appends a tile for each channel behind its videos (art = one of its
   video thumbnails). Channels already shown as YouTube's own tiles, empty in YouTube Kids for
@@ -57,6 +62,24 @@ LIVE=1 .venv/bin/python -m pytest -q      # plus live API tests
 ./scripts/build.sh                        # dist/plugin.video.littlescreen-<version>.zip
 ./scripts/install-kodi.sh                 # copy into the local Kodi (macOS) and enable
 ```
+
+## Language filter: adding a pack
+
+A pack makes the filter tell a language apart from its neighbours word by word (needed when
+a catalogue mixes close languages, like Czech and Slovak). Without one, a catalogue is
+filtered by script and language names only.
+
+1. Collect real titles from the catalogue (`hl`/`gl` of the language) that the filter gets
+   wrong or cannot decide, and from the neighbouring languages that turn up in it.
+2. Add `packs/<code>.py` with `CODE`, `LETTERS` (letters no other pack uses), `WORDS`
+   (lowercase whole words) and, if needed, `PATTERNS` (regexes matched against a whole
+   lowercase word), and register it in `packs/__init__.py` (`complete=True` once it is
+   good enough to filter a catalogue on its own; incomplete packs only add evidence against
+   complete ones, like `others.py`). Language names go into `NAMES` in `language.py`.
+3. Word and letter lists must not overlap between packs or with the language names
+   (`test_word_lists_do_not_overlap`); a word two languages share is no marker.
+4. Add the real titles as test cases (title, channel, expected) in `tests/test_language.py`,
+   for the new language's catalogue and for the catalogues of its neighbours.
 
 ## Gotchas
 

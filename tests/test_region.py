@@ -1,4 +1,4 @@
-from littlescreen import language, region
+from littlescreen import region
 
 LANGINFO = """<?xml version="1.0" encoding="UTF-8"?>
 <language>
@@ -87,15 +87,3 @@ def test_resolve_empty_settings_follow_kodi():
 
 def test_resolve_falls_back_when_kodi_does_not_say():
     assert region.resolve("", "", lambda: None, lambda: None) == ("en", "US")
-
-
-def test_filter_mode_automatic_follows_the_catalogue_language():
-    assert language.filter_mode(language.AUTOMATIC, "cs") == language.CZECH_ONLY
-    assert language.filter_mode(language.AUTOMATIC, "CS") == language.CZECH_ONLY
-    assert language.filter_mode(language.AUTOMATIC, "de") == language.SHOW_ALL
-    assert language.filter_mode(language.AUTOMATIC, "en-GB") == language.SHOW_ALL
-
-
-def test_filter_mode_manual_choice_stays():
-    for mode in (language.SHOW_ALL, language.HIDE_SLOVAK, language.CZECH_ONLY):
-        assert language.filter_mode(mode, "de") == mode

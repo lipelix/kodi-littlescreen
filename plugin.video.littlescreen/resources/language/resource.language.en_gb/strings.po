@@ -83,16 +83,12 @@ msgctxt "#30024"
 msgid "Any language"
 msgstr ""
 
-msgctxt "#30025"
-msgid "All but Slovak"
-msgstr ""
-
 msgctxt "#30026"
-msgid "Czech only"
+msgid "Only the catalogue language"
 msgstr ""
 
 msgctxt "#30046"
-msgid "Guessed from titles and channel names. Automatic: Czech only for the Czech catalogue, otherwise any language. \"Czech only\" also hides other languages; videos whose language is unclear stay."
+msgid "Guessed from titles and channel names. \"Only the catalogue language\" hides videos in other languages; videos whose language is unclear stay. Czech and Slovak are told apart word by word; for other languages only the script (Latin, Cyrillic, Japanese, ...) and language names count."
 msgstr ""
 
 msgctxt "#30027"
@@ -149,10 +145,6 @@ msgstr ""
 
 msgctxt "#30045"
 msgid "Country whose catalogue is shown, for example CZ or SK. Leave empty to follow Kodi's region."
-msgstr ""
-
-msgctxt "#30028"
-msgid "Automatic"
 msgstr ""
 
 msgctxt "#30050"

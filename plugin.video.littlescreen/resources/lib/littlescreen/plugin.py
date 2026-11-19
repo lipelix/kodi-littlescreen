@@ -247,21 +247,21 @@ class Plugin:
 
     # -- listing ----------------------------------------------------------
 
-    def filter_language(self, profile, page, kind, memory, mode):
+    def filter_language(self, profile, page, kind, memory, mode, target):
         """Drop videos and channels in unwanted languages, topping up from next pages."""
-        if mode == language.SHOW_ALL:
+        if mode == language.ANY_LANGUAGE:
             return page
         kept = catalog.Page(title=page.title)
         seen = set()
         for extra in range(MAX_EXTRA_PAGES + 1):
-            langs = language.classify(page.items, memory)
+            langs = language.classify(page.items, memory, target)
             unclear = language.unclear_channels(page.items, langs, memory, PROBE_CHANNELS)
             if unclear:
                 self.probe_channels(self.client(profile), unclear, memory)
-                langs = language.classify(page.items, memory, learn_first=False)
+                langs = language.classify(page.items, memory, target, learn_first=False)
             for entry in page.items:
                 key = getattr(entry, "video_id", None) or entry.channel_id
-                if key not in seen and language.keep(langs[id(entry)], mode):
+                if key not in seen and language.keep(langs[id(entry)], mode, target):
                     seen.add(key)
                     kept.items.append(entry)
             kept.continuation = page.continuation
@@ -274,7 +274,7 @@ class Plugin:
                 page = catalog.parse_continuation(client.continuation(page.continuation))
         return kept
 
-    def channel_tiles(self, profile, page, memory, mode):
+    def channel_tiles(self, profile, page, memory, mode, target):
         """Tiles for the channels behind the page's videos, so a category is not only its
         fixed set of about 36 items. Channels already shown, empty in YouTube Kids or in an
         unwanted language are left out."""
@@ -291,7 +291,8 @@ class Plugin:
         for channel_id, video in candidates.items():
             if not memory.has_videos(channel_id):
                 continue
-            if language.keep(language.channel_language(memory, channel_id), mode):
+            lang = language.channel_language(memory, channel_id, target)
+            if language.keep(lang, mode, target):
                 tiles.append(catalog.Channel(channel_id, video.channel, thumbnail=video.thumbnail))
         return tiles
 
@@ -333,11 +334,12 @@ class Plugin:
         xbmc.Player().play(playlist)
 
     def list_page(self, profile, page, kind, channel_tiles=False):
-        mode = language.filter_mode(self.addon.getSettingInt("video_language"), self.locale()[0])
+        mode = language.filter_mode(self.addon.getSettingInt("video_language"))
+        target = language.target_language(self.locale()[0])
         memory = language.ChannelMemory(self.data_file("channels.json"), profile.age_group)
-        page = self.filter_language(profile, page, kind, memory, mode)
+        page = self.filter_language(profile, page, kind, memory, mode, target)
         if channel_tiles:
-            page.items.extend(self.channel_tiles(profile, page, memory, mode))
+            page.items.extend(self.channel_tiles(profile, page, memory, mode, target))
         memory.save()
         videos = [e for e in page.items if isinstance(e, catalog.Video)]
         if profile.autoplay:
