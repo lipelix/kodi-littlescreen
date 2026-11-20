@@ -1,6 +1,6 @@
 # Plan 1: public release on GitHub Pages
 
-Status: in progress — Tasks 1–7 and the README screenshots (#25) done; big-pictures look without video titles (#30); Task 8: tree and history scanned, version 1.0.0, waiting for the owner to make the repository public and switch Pages on (2026-11-19)
+Status: in progress — Tasks 1–7 and the README screenshots (#25) done; big-pictures look without video titles (#30); Task 8: tree and history scanned, version 1.0.0, repository public, CI on GitHub-hosted runners only (2026-11-20)
 
 ## Goal
 
@@ -75,7 +75,8 @@ youtubekids.com page; some loads carry an experiment build (handled in 0.4.2).
 - GitHub Actions on pull requests and `main`: `ruff check`, `ruff format --check`, `pytest`
   (no live tests), `kodi-addon-checker --branch omega`, build the add-on zip as an artifact.
 - While the repository is private, jobs run on the self-hosted runner picked by the
-  `RUNNER_LABELS` repository variable; once public, GitHub-hosted runners are fine.
+  `RUNNER_LABELS` repository variable; once public, GitHub-hosted runners only (the
+  variable was dropped in Task 8, so a fork's pull request cannot reach a self-hosted runner).
 - Done when: a PR shows the checks green.
 
 ### Task 5: Kodi repository on GitHub Pages

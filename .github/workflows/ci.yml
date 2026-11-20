@@ -14,9 +14,9 @@ concurrency:
 
 jobs:
   check:
-    # While the repository is private, the RUNNER_LABELS repository variable picks
-    # the self-hosted runner (e.g. ["self-hosted","lipelix"]); unset = GitHub-hosted.
-    runs-on: ${{ vars.RUNNER_LABELS && fromJSON(vars.RUNNER_LABELS) || 'ubuntu-latest' }}
+    # GitHub-hosted only: the repository is public, and pull requests from forks
+    # must never run on a self-hosted runner.
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
       # no __pycache__ in the add-on tree (kodi-addon-checker warns about it)
