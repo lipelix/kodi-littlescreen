@@ -90,9 +90,8 @@ LIVE=1 .venv/bin/python -m pytest -q      # plus live API tests
 
 CI (`.github/workflows/ci.yml`, pull requests and `main`) runs ruff, pytest (no live tests),
 `kodi-addon-checker --branch omega` on both add-ons and uploads the zip from `build.sh` and
-the repository tree (`pages`) as artifacts. Jobs
-run on the runner named by the `RUNNER_LABELS` repository variable (JSON list of labels; the
-self-hosted runner while the repository is private), GitHub-hosted `ubuntu-latest` when unset.
+the repository tree (`pages`) as artifacts. All jobs run on GitHub-hosted `ubuntu-latest`:
+the repository is public, so a pull request from a fork must never reach a self-hosted runner.
 
 ## Language filter: adding a pack
 
