@@ -38,9 +38,10 @@ updates automatically. It needs Kodi 20 (Nexus) or later.
 
 1. In Kodi, open **Settings → System → Add-ons** and turn on **Unknown sources**.
 2. Get the repository zip, either way:
-   - download `repository.littlescreen-1.0.0.zip` from the
-     [repository page](https://lipelix.github.io/kodi-littlescreen/) and copy it to a place
-     Kodi can open (USB stick, network share), or
+   - download
+     [`repository.littlescreen-1.0.0.zip`](https://github.com/lipelix/kodi-littlescreen/releases/latest/download/repository.littlescreen-1.0.0.zip)
+     (also on the [repository page](https://lipelix.github.io/kodi-littlescreen/)) and copy it
+     to a place Kodi can open (USB stick, network share), or
    - in **Settings → File manager → Add source**, enter
      `https://lipelix.github.io/kodi-littlescreen/` and name it `littlescreen`.
 3. **Settings → Add-ons → Install from zip file** → pick the zip (or the `littlescreen`
@@ -107,6 +108,9 @@ starts on its own: Little Screen does not use YouTube's suggested videos, and Ko
   client version (refreshed daily), the titles of recently listed videos (for the autoplay
   queue) and what it learned about channels (their language, whether they have videos for an
   age group). Little Screen keeps no watch history.
+- The only count of users is GitHub's download count of the repository zip on the
+  [releases page](https://github.com/lipelix/kodi-littlescreen/releases): roughly the first
+  installs. Updates come through Kodi and are not counted.
 
 ## Limits
 

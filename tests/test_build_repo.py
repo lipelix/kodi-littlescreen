@@ -104,7 +104,9 @@ def test_landing_page(tree):
     with open(os.path.join(tree, "index.html")) as f:
         html = f.read()
     repo_zip = f"repository.littlescreen-{version_of('repository.littlescreen')}.zip"
-    assert f'class="button" href="{repo_zip}"' in html
+    # the button counts downloads: the copy on the latest GitHub Release (pages.yml)
+    release = "https://github.com/lipelix/kodi-littlescreen/releases/latest/download/"
+    assert f'class="button" href="{release}{repo_zip}"' in html
     assert f"Version {version_of('plugin.video.littlescreen')}" in html
     assert "$" not in html  # every placeholder filled in
     # Kodi lists the links whose text equals the href: exactly the files, nothing else
@@ -116,6 +118,14 @@ def test_landing_page(tree):
     assert [s for s in shown if s.startswith("screenshots/")]
     for src in shown:
         assert os.path.isfile(os.path.join(tree, src)), src
+
+
+def test_landing_page_elsewhere_links_its_own_zip(tmp_path):
+    out = build_repo.build(ROOT, str(tmp_path / "local"), url="http://127.0.0.1:8765/")
+    with open(os.path.join(out, "index.html")) as f:
+        html = f.read()
+    repo_zip = f"repository.littlescreen-{version_of('repository.littlescreen')}.zip"
+    assert f'class="button" href="{repo_zip}"' in html
 
 
 def test_zips_are_reproducible(tree, tmp_path):

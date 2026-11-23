@@ -52,7 +52,12 @@ icon and repository name; descriptions may say it shows the YouTube Kids catalog
   `scripts/build_repo.py` builds that tree (`addons.xml` + `.md5`, `<id>/<id>-<version>.zip`,
   assets, the repository zip at the root, an `index.html` in every folder; the root one is the
   landing page from `scripts/landing.html`, whose own links must not have their href as text);
-  `.github/workflows/pages.yml` publishes it on a `v*` tag that matches the add-on version.
+  `.github/workflows/pages.yml` publishes it on a `v*` tag that matches the add-on version
+  and creates a GitHub Release for the tag with the repository and add-on zips (uploads only
+  missing assets: replacing one resets its download count). The landing page button and the
+  README link the repository zip on `releases/latest/download/`: its download count is the
+  only user count (roughly first installs; no analytics). The README names that zip with
+  `repository.littlescreen`'s version: update it when that version changes.
   Bump `plugin.video.littlescreen`'s version for every release; Kodi updates from the repository.
 - `README.md` is the user guide (install, settings, filter, autoplay, privacy, limits, the macOS
   note); keep it and the landing page in step with settings and behaviour.

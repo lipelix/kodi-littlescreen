@@ -3,6 +3,9 @@ name: Pages
 # Publishes the Kodi repository (scripts/build_repo.py) to
 # https://lipelix.github.io/kodi-littlescreen/ when a v* tag is pushed.
 # The tag must match the add-on version: v1.0.0 <-> version="1.0.0".
+# A tag also gets a GitHub Release with the repository and add-on zips: the landing page and
+# README link the repository zip there, so GitHub's download count shows roughly the first
+# installs (updates come through Kodi and are not counted; nothing is sent from the device).
 
 on:
   push:
@@ -59,6 +62,17 @@ jobs:
         with:
           path: _site
 
+      - name: Collect the release zips
+        run: |
+          mkdir _release
+          cp _site/repository.littlescreen-*.zip _site/plugin.video.littlescreen/*.zip _release/
+
+      - uses: actions/upload-artifact@v5
+        with:
+          name: release
+          path: _release
+          if-no-files-found: error
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -71,3 +85,36 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  release:
+    needs: build
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: release
+          path: _release
+
+      - name: Create or update the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          if ! gh release view "$TAG" > /dev/null 2>&1; then
+            gh release create "$TAG" --verify-tag --title "Little Screen ${TAG#v}" \
+              --notes "Install the repository zip in Kodi (Settings → Add-ons → Install from zip file), then Little Screen from it. Guide: https://github.com/lipelix/kodi-littlescreen#install" \
+              --generate-notes
+          fi
+          # upload only what is missing: replacing an asset would reset its download count
+          have=$(gh release view "$TAG" --json assets --jq '.assets[].name')
+          for zip in _release/*.zip; do
+            if ! grep -qxF "$(basename "$zip")" <<< "$have"; then
+              gh release upload "$TAG" "$zip"
+            fi
+          done
+          gh release view "$TAG" --json assets --jq '.assets[] | "\(.name) \(.downloadCount)"'
