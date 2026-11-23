@@ -108,9 +108,10 @@ jobs:
           if ! gh release view "$TAG" > /dev/null 2>&1; then
             gh release create "$TAG" --verify-tag --title "Little Screen ${TAG#v}" \
               --notes "Install the repository zip in Kodi (Settings → Add-ons → Install from zip file), then Little Screen from it. Guide: https://github.com/lipelix/kodi-littlescreen#install" \
-              --generate-notes
+              --generate-notes _release/*.zip
           fi
-          # upload only what is missing: replacing an asset would reset its download count
+          # an existing release (a rerun): upload only what is missing, replacing an asset
+          # would reset its download count
           have=$(gh release view "$TAG" --json assets --jq '.assets[].name')
           for zip in _release/*.zip; do
             if ! grep -qxF "$(basename "$zip")" <<< "$have"; then
