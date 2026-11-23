@@ -17,6 +17,10 @@ Writes into OUT (default dist/pages, emptied first):
 Zips are reproducible: sorted entries, fixed timestamps, no caches.
 --url serves the tree from somewhere else than GitHub Pages (e.g. http://127.0.0.1:8765/ to
 test it with a local Kodi): the repository add-on in the tree then points there.
+
+The landing page's "Download repository" button links to the copy of the repository zip on
+the latest GitHub Release (pages.yml attaches it): GitHub counts its downloads, roughly the
+first installs. With --url it links to the copy in the tree instead.
 """
 
 import argparse
@@ -32,6 +36,7 @@ ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
 ADDONS = ("plugin.video.littlescreen", "repository.littlescreen")
 REPOSITORY = "repository.littlescreen"
 PAGES_URL = "https://lipelix.github.io/kodi-littlescreen/"
+RELEASE_URL = "https://github.com/lipelix/kodi-littlescreen/releases/latest/download/"
 LANDING = os.path.join(os.path.dirname(os.path.abspath(__file__)), "landing.html")
 PLUGIN = "plugin.video.littlescreen"
 SCREENSHOTS = os.path.join("docs", "screenshots")
@@ -141,22 +146,25 @@ def page(title, body):
 """
 
 
-def landing(files, repo_zip, version):
+def landing(files, repo_zip, repo_zip_url, version):
     """The root index.html: the landing page around the list of files.
 
     Its other links have a text that differs from their href, so Kodi ignores them.
     """
     with open(LANDING, encoding="utf-8") as f:
         template = string.Template(f.read())
-    return template.substitute(files=files, repo_zip=repo_zip, version=version)
+    return template.substitute(
+        files=files, repo_zip=repo_zip, repo_zip_url=repo_zip_url, version=version
+    )
 
 
-def write_indexes(out, repo_zip, version):
+def write_indexes(out, repo_zip, repo_zip_url, version):
     """index.html in every folder (GitHub Pages has no directory listing)."""
     for dirpath, _dirnames, _filenames in os.walk(out):
         rel = os.path.relpath(dirpath, out).replace(os.sep, "/")
         if rel == ".":
-            write(os.path.join(dirpath, "index.html"), landing(listing(dirpath), repo_zip, version))
+            html = landing(listing(dirpath), repo_zip, repo_zip_url, version)
+            write(os.path.join(dirpath, "index.html"), html)
             continue
         body = f"<h1>{rel}/</h1>\n<ul>\n{listing(dirpath)}\n</ul>"
         write(os.path.join(dirpath, "index.html"), page(f"Little Screen: {rel}/", body))
@@ -205,7 +213,8 @@ def build(src, out, url=PAGES_URL):
     screenshots = os.path.join(src, SCREENSHOTS)
     if os.path.isdir(screenshots):
         shutil.copytree(screenshots, os.path.join(out, "screenshots"))
-    write_indexes(out, repo_zip, versions[PLUGIN])
+    repo_zip_url = RELEASE_URL + repo_zip if url == PAGES_URL else repo_zip
+    write_indexes(out, repo_zip, repo_zip_url, versions[PLUGIN])
     return out
 
 
