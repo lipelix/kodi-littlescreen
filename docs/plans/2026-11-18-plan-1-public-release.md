@@ -1,6 +1,6 @@
 # Plan 1: public release on GitHub Pages
 
-Status: in progress — Tasks 1–8, the README screenshots (#25) and the big-pictures fix (#30) done; v1.0.0 public at https://lipelix.github.io/kodi-littlescreen/ (2026-11-20); Task 9: switching the maintainer's Kodi, waiting for it to be idle
+Status: in progress — Tasks 1–8, the README screenshots (#25) and the big-pictures fix (#30) done; v1.0.0 public at https://lipelix.github.io/kodi-littlescreen/ (2026-11-20); Task 9 done (2026-11-23): the maintainer's Kodi runs Little Screen from the Pages repository, the predecessor is removed and its repository archived; open: counting first installs (#34)
 
 ## Goal
 
